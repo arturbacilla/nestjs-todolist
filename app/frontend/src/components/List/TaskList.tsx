@@ -11,9 +11,11 @@ const TaskList: React.FC<ITaksList> = ({ tasks, filter }) => {
   return (
     <TabPanel p={0} h="100%">
       <Accordion allowMultiple h="100%">
-        {filtered.map((task) => (
-          <ListItem task={task} />
-        ))}
+        {filtered
+          .sort((a, b) => (a.id > b.id ? 1 : -1))
+          .map((task) => (
+            <ListItem task={task} />
+          ))}
       </Accordion>
     </TabPanel>
   );
