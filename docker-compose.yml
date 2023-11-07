@@ -9,7 +9,7 @@ services:
       backend:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "lsof", "-t", "-i:3000"]
+      test: ["CMD", "lsof", "-t", "-i:5173"]
       timeout: 10s
       retries: 5
     ports:
@@ -36,7 +36,7 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     ports:
-      - "3002:5432"
+      - "5432:5432"
     env_file:
       - .env
     restart: unless-stopped

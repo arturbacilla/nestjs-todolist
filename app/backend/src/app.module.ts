@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
+import { PrismaService } from './database/prisma.service';
+import { TaskService } from './task/task.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import configuration from './configuration';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [PrismaService, TaskService],
 })
 export class AppModule {}

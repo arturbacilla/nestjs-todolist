@@ -9,6 +9,7 @@ export interface ITask {
   title: string;
   description?: string;
   status: keyof typeof TaskStatus;
+  author: string;
   creationDate: Date;
   conclusionDate?: Date;
 }
