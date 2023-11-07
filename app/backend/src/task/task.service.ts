@@ -9,7 +9,7 @@ export class TaskService {
     const created = await this.prisma.task.create({
       data: {
         title,
-        description,
+        description: description || null,
       },
     });
     return created;

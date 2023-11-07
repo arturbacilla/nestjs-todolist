@@ -7,10 +7,10 @@ export class AppController {
 
   @Post('task')
   async addTask(@Body() body: any) {
-    const { title, description } = body;
+    const { title, description } = body || {};
     const added = await this.taskService.addTask({
       title,
-      description,
+      description: description || undefined,
     });
     console.log(added);
   }
