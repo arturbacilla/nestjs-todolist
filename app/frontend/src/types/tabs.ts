@@ -10,6 +10,7 @@ export interface ITask {
   description?: string;
   status: keyof typeof TaskStatus;
   creationDate: Date;
+  conclusionDate?: Date;
 }
 
 export interface ITabs {

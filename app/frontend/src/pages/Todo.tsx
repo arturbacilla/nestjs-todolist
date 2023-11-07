@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Box,
   Button,
   Card,
+  CircularProgress,
   Flex,
   Input,
   InputGroup,
@@ -10,86 +11,21 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import TasksTabs from "../components/Tabs/TasksTabs";
-import { ITask } from "../types/tabs";
+import TasksContext from "../context/TasksContext";
+import { ITasksContext } from "../types/context";
 
 const Todo: React.FC = () => {
-  const taskList: ITask[] = [
-    {
-      id: 1,
-      title: "Teste",
-      status: "ACTIVE",
-      creationDate: new Date(),
-    },
-    {
-      id: 2,
-      title: "Teste-completed",
-      status: "COMPLETED",
-      creationDate: new Date(),
-    },
-    {
-      id: 3,
-      title: "Teste3",
-      status: "ACTIVE",
-      description: "TEste da descrição",
-      creationDate: new Date(),
-    },
-    {
-      id: 4,
-      title: "Teste4",
-      status: "ACTIVE",
-      creationDate: new Date(),
-    },
-    {
-      id: 5,
-      title: "Teste5",
-      status: "COMPLETED",
-      creationDate: new Date(),
-    },
-    {
-      id: 6,
-      title: "Teste-completed2",
-      status: "COMPLETED",
-      creationDate: new Date(),
-    },
-    {
-      id: 7,
-      title: "Teste6",
-      status: "ACTIVE",
-      description: "TEste da descrição",
-      creationDate: new Date(),
-    },
-    {
-      id: 8,
-      title: "Teste7",
-      status: "ACTIVE",
-      creationDate: new Date(),
-    },
-    {
-      id: 9,
-      title: "Teste8",
-      status: "COMPLETED",
-      creationDate: new Date(),
-    },
-    {
-      id: 10,
-      title: "Teste-completed4",
-      status: "COMPLETED",
-      creationDate: new Date(),
-    },
-    {
-      id: 11,
-      title: "Teste9",
-      status: "ACTIVE",
-      description: "TEste da descrição",
-      creationDate: new Date(),
-    },
-    {
-      id: 12,
-      title: "Teste10",
-      status: "ACTIVE",
-      creationDate: new Date(),
-    },
-  ];
+  const { loadingHandlers, tasksHandlers } =
+    useContext<ITasksContext | null>(TasksContext) || {};
+
+  const [tasks] = tasksHandlers || [];
+  const [isLoading, setIsLoading] = loadingHandlers || [];
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading && setIsLoading(false), 1000);
+  }, [setIsLoading]);
+
+  if (!loadingHandlers || !tasksHandlers) return;
 
   return (
     <Flex
@@ -106,7 +42,7 @@ const Todo: React.FC = () => {
         alignItems="stretch"
         overflowY="hidden"
       >
-        <Box id="add-header" w="100%" minH="15%">
+        <Box id="add-header" w="100%" pb={2}>
           <InputGroup>
             <InputLeftElement
               color="gray.300"
@@ -129,7 +65,18 @@ const Todo: React.FC = () => {
             />
           </InputGroup>
         </Box>
-        <TasksTabs tasks={taskList} />
+        {!isLoading ? (
+          <TasksTabs tasks={tasks || []} />
+        ) : (
+          <CircularProgress
+            isIndeterminate
+            color="orange.500"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            h="100%"
+          />
+        )}
       </Card>
     </Flex>
   );
