@@ -48,6 +48,24 @@ export class TaskService {
     }
   }
 
+  async updateTask(
+    id: number,
+    payload: Prisma.TaskUpdateInput,
+  ): Promise<
+    Prisma.TaskCreateArgs['data'] | null | Prisma.PrismaClientKnownRequestError
+  > {
+    try {
+      const exists = await this.prisma.task.findUnique({ where: { id } });
+      if (!exists) return null;
+      return await this.prisma.task.update({
+        where: { id },
+        data: payload,
+      });
+    } catch (error) {
+      return error;
+    }
+  }
+
   async deleteTask({
     id,
   }): Promise<

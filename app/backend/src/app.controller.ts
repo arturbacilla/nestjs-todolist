@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { TaskService } from './task/task.service';
 import { Prisma } from '@prisma/client';
 import DefaultResponse from './utils/default';
@@ -23,6 +31,22 @@ export class AppController {
     );
   }
 
+  @Post('task')
+  async addTask(@Body() body: any) {
+    const { title, description } = body || {};
+    const added = await this.taskService.addTask({
+      title,
+      description: description || undefined,
+    });
+    if (!added || added instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
+        added as Prisma.PrismaClientKnownRequestError,
+        'INTERNAL_SERVER_ERROR',
+      );
+    }
+    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(added, 'OK');
+  }
+
   @Get('task/:id')
   async getTask(@Param('id') id: number) {
     const task = await this.taskService.getTask({ id });
@@ -40,20 +64,19 @@ export class AppController {
     );
   }
 
-  @Post('task')
-  async addTask(@Body() body: any) {
-    const { title, description } = body || {};
-    const added = await this.taskService.addTask({
-      title,
-      description: description || undefined,
-    });
-    if (!added || added instanceof Prisma.PrismaClientKnownRequestError) {
+  @Put('task/:id')
+  async updateTask(@Param('id') id: number, @Body() payload: any) {
+    const updated = await this.taskService.updateTask(id, payload);
+    if (!updated) {
+      throw new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
+    }
+    if (updated instanceof Prisma.PrismaClientKnownRequestError) {
       throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
-        added as Prisma.PrismaClientKnownRequestError,
+        updated,
         'INTERNAL_SERVER_ERROR',
       );
     }
-    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(added, 'OK');
+    return new DefaultResponse<Prisma.TaskUpdateArgs['data']>(updated, 'OK');
   }
 
   @Delete('task/:id')

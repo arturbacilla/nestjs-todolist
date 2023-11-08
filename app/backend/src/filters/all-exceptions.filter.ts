@@ -5,12 +5,16 @@ import ResponseError from 'src/utils/error';
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
   catch(exception, host) {
+    const code = exception.response
+      ? exception.response.statusCode
+      : exception.statusCode;
     try {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse();
-      response.status(exception.statusCode || 500).json(exception.response);
+      const json = exception.response ? exception.response : exception;
+      response.status(code || 500).json(json);
     } catch (error) {
-      throw new ResponseError(error, 'INTERNAL_SERVER_ERROR');
+      throw new ResponseError(error, code);
     }
   }
 }
