@@ -12,7 +12,7 @@ export class AppController {
   async getTasks() {
     const allTasks = await this.taskService.getTasks();
     if (!allTasks || allTasks instanceof Prisma.PrismaClientKnownRequestError) {
-      return new ResponseError<Prisma.PrismaClientKnownRequestError>(
+      throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
         allTasks as Prisma.PrismaClientKnownRequestError,
         'INTERNAL_SERVER_ERROR',
       );
@@ -27,9 +27,9 @@ export class AppController {
   async getTask(@Param('id') id: number) {
     const task = await this.taskService.getTask({ id });
     if (!task)
-      return new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
+      throw new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
     if (task instanceof Prisma.PrismaClientKnownRequestError) {
-      return new ResponseError<Prisma.PrismaClientKnownRequestError>(
+      throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
         task as Prisma.PrismaClientKnownRequestError,
         'INTERNAL_SERVER_ERROR',
       );
@@ -48,7 +48,7 @@ export class AppController {
       description: description || undefined,
     });
     if (!added || added instanceof Prisma.PrismaClientKnownRequestError) {
-      return new ResponseError<Prisma.PrismaClientKnownRequestError>(
+      throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
         added as Prisma.PrismaClientKnownRequestError,
         'INTERNAL_SERVER_ERROR',
       );
@@ -62,10 +62,10 @@ export class AppController {
       id,
     });
     if (!deleted) {
-      return new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
+      throw new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
     }
     if (deleted instanceof Prisma.PrismaClientKnownRequestError) {
-      return new ResponseError<Prisma.PrismaClientKnownRequestError>(
+      throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
         deleted,
         'INTERNAL_SERVER_ERROR',
       );

@@ -1,12 +1,12 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { PrismaClientExceptionFilter } from 'nestjs-prisma';
+import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   await app.listen(3001);
 }

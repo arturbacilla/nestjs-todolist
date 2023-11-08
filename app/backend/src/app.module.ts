@@ -1,12 +1,9 @@
-import { HttpStatus, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
 import { TaskService } from './task/task.service';
-import {
-  PrismaModule,
-  providePrismaClientExceptionFilter,
-} from 'nestjs-prisma';
+import { PrismaModule } from 'nestjs-prisma';
 
 @Module({
   imports: [
@@ -19,13 +16,6 @@ import {
     }),
   ],
   controllers: [AppController],
-  providers: [
-    providePrismaClientExceptionFilter({
-      P2000: HttpStatus.BAD_REQUEST,
-      P2002: HttpStatus.CONFLICT,
-      P2025: HttpStatus.NOT_FOUND,
-    }),
-    TaskService,
-  ],
+  providers: [TaskService],
 })
 export class AppModule {}

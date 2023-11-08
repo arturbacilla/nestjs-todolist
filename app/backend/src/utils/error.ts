@@ -2,15 +2,15 @@ import { HttpStatus } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 class ResponseError<T> extends Error {
-  code: number;
+  statusCode: number;
   type?: string;
   error: boolean;
   name: string;
 
-  constructor(error: T | Error, statusCode: keyof typeof HttpStatus & string) {
+  constructor(error: T | Error, customCode: keyof typeof HttpStatus & string) {
     super();
 
-    this.code = HttpStatus[statusCode];
+    this.statusCode = HttpStatus[customCode];
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       this.type = error.code;
       this.message = error.message;
@@ -26,11 +26,12 @@ class ResponseError<T> extends Error {
     }
 
     (Error as ErrorConstructor).captureStackTrace(this, this.constructor);
+
     return {
       error: true,
       name: this.name,
       message: this.message,
-      code: this.code,
+      statusCode: this.statusCode,
       type: this.type,
     };
   }
