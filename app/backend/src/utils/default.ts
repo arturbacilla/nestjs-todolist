@@ -1,22 +1,22 @@
-import { StatusCodes } from 'http-status-codes';
+import { HttpStatus } from '@nestjs/common';
 
 class DefaultResponse<T> {
-  code: number;
+  statusCode: number;
   type?: string;
   message: T | string;
   error: boolean;
 
   constructor(
     message: T | string,
-    statusCode: keyof typeof StatusCodes & string,
+    customCode: keyof typeof HttpStatus & string,
   ) {
-    this.code = StatusCodes[statusCode];
+    this.statusCode = HttpStatus[customCode];
     this.message = message;
 
     return {
       error: false,
       message: this.message,
-      code: this.code,
+      statusCode: this.statusCode,
       type: this.type,
     };
   }

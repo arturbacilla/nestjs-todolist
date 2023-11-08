@@ -13,11 +13,31 @@ export class AppController {
     const allTasks = await this.taskService.getTasks();
     if (!allTasks || allTasks instanceof Prisma.PrismaClientKnownRequestError) {
       return new ResponseError<Prisma.PrismaClientKnownRequestError>(
-        allTasks,
+        allTasks as Prisma.PrismaClientKnownRequestError,
         'INTERNAL_SERVER_ERROR',
       );
     }
-    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(allTasks, 'OK');
+    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(
+      allTasks as any,
+      'OK',
+    );
+  }
+
+  @Get('task/:id')
+  async getTask(@Param('id') id: number) {
+    const task = await this.taskService.getTask({ id });
+    if (!task)
+      return new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
+    if (task instanceof Prisma.PrismaClientKnownRequestError) {
+      return new ResponseError<Prisma.PrismaClientKnownRequestError>(
+        task as Prisma.PrismaClientKnownRequestError,
+        'INTERNAL_SERVER_ERROR',
+      );
+    }
+    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(
+      task as Prisma.TaskCreateArgs['data'],
+      'OK',
+    );
   }
 
   @Post('task')
@@ -29,7 +49,7 @@ export class AppController {
     });
     if (!added || added instanceof Prisma.PrismaClientKnownRequestError) {
       return new ResponseError<Prisma.PrismaClientKnownRequestError>(
-        added,
+        added as Prisma.PrismaClientKnownRequestError,
         'INTERNAL_SERVER_ERROR',
       );
     }
@@ -38,17 +58,22 @@ export class AppController {
 
   @Delete('task/:id')
   async deleteTask(@Param('id') id: number) {
-    // todo: adicionar método para ver o erro de notfound
     const deleted = await this.taskService.deleteTask({
       id,
     });
-    if (!deleted || deleted instanceof Prisma.PrismaClientKnownRequestError) {
+    if (!deleted) {
+      return new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
+    }
+    if (deleted instanceof Prisma.PrismaClientKnownRequestError) {
       return new ResponseError<Prisma.PrismaClientKnownRequestError>(
         deleted,
         'INTERNAL_SERVER_ERROR',
       );
     }
 
-    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(deleted, 'OK');
+    return new DefaultResponse<Prisma.TaskCreateArgs['data']>(
+      `Deleted task ${deleted.id}`,
+      'OK',
+    );
   }
 }
