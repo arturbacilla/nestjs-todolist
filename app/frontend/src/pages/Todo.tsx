@@ -1,4 +1,6 @@
-import React, { useContext, useEffect } from "react";
+/// <reference types="vite-plugin-svgr/client" />
+import React, { useCallback, useContext, useEffect } from "react";
+import NotebookSVG from "../assets/notebook.svg?react";
 import {
   Box,
   Button,
@@ -20,20 +22,30 @@ import TasksContext from "../context/TasksContext";
 import { ITasksContext } from "../types/context";
 import NewTask from "../components/Popover/NewTask";
 import FocusLock from "react-focus-lock";
+import { requestGet } from "../services/api";
 
 const Todo: React.FC = () => {
   const { loadingHandlers, tasksHandlers, newTaskInput } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
-  const [tasks] = tasksHandlers || [];
+  const [tasks, setTasks] = tasksHandlers || [];
   const [taskInput, setTaskInput] = newTaskInput || [];
   const [isLoading, setIsLoading] = loadingHandlers || [];
   const { onOpen, onClose, isOpen } = useDisclosure();
   const firstFieldRef = React.useRef(null);
 
+  const fetchAllTasks = useCallback(() => {
+    if (!setTasks || !setIsLoading) return;
+    const endpoint = "/tasks";
+    return requestGet(endpoint)
+      .then((result) => setTasks(result.data.message))
+      .catch((reject) => console.error(reject))
+      .finally(() => setIsLoading(false));
+  }, [setTasks, setIsLoading]);
+
   useEffect(() => {
-    setTimeout(() => setIsLoading && setIsLoading(false), 1000);
-  }, [setIsLoading]);
+    fetchAllTasks();
+  }, [fetchAllTasks]);
 
   if (!loadingHandlers || !tasksHandlers || !setTaskInput) return;
 
@@ -52,7 +64,15 @@ const Todo: React.FC = () => {
         alignItems="stretch"
         overflowY="hidden"
       >
-        <Box id="add-header" w="100%" pb={2}>
+        <Box
+          id="add-header"
+          w="100%"
+          pb={2}
+          display="flex"
+          alignItems="flex-end"
+          justifyContent="space-between"
+          gap="2rem"
+        >
           <Popover
             isOpen={isOpen}
             initialFocusRef={firstFieldRef}
@@ -102,6 +122,16 @@ const Todo: React.FC = () => {
               </FocusLock>
             </PopoverContent>
           </Popover>
+          <Box
+            h="100px"
+            w="100px"
+            position="absolute"
+            float="right"
+            top="8px"
+            right="8px"
+          >
+            <NotebookSVG />
+          </Box>
         </Box>
         {!isLoading ? (
           <TasksTabs tasks={tasks || []} />

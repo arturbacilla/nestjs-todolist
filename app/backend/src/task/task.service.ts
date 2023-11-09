@@ -54,13 +54,34 @@ export class TaskService {
   ): Promise<
     Prisma.TaskCreateArgs['data'] | null | Prisma.PrismaClientKnownRequestError
   > {
+    const where = { id: Number(id) };
     try {
-      const exists = await this.prisma.task.findUnique({ where: { id } });
+      const exists = await this.prisma.task.findUnique({ where });
       if (!exists) return null;
       return await this.prisma.task.update({
-        where: { id },
+        where,
         data: payload,
       });
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async toggleTask(
+    id: number,
+    newStatus: boolean,
+  ): Promise<boolean | Prisma.PrismaClientKnownRequestError> {
+    const where = { id: Number(id) };
+    const status = newStatus ? 'COMPLETED' : 'ACTIVE';
+    try {
+      const exists = await this.prisma.task.findUnique({ where });
+      if (!exists) return false;
+      const updated = await this.prisma.task.update({
+        where,
+        data: { status },
+      });
+      if (!updated) return false;
+      return true;
     } catch (error) {
       return error;
     }

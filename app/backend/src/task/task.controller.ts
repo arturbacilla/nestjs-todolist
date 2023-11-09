@@ -7,13 +7,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { TaskService } from './task/task.service';
+import { TaskService } from './task.service';
 import { Prisma } from '@prisma/client';
-import DefaultResponse from './utils/default';
-import ResponseError from './utils/error';
+import DefaultResponse from '../utils/default';
+import ResponseError from '../utils/error';
 
 @Controller()
-export class AppController {
+export class TaskController {
   constructor(private taskService: TaskService) {}
 
   @Get('tasks')
@@ -60,6 +60,30 @@ export class AppController {
     }
     return new DefaultResponse<Prisma.TaskCreateArgs['data']>(
       task as Prisma.TaskCreateArgs['data'],
+      'OK',
+    );
+  }
+
+  @Post('task/:id')
+  async toggleTask(
+    @Param('id') id: number,
+    @Body() { status }: { status: boolean },
+  ) {
+    const toggle = await this.taskService.toggleTask(id, status);
+    if (!toggle) {
+      throw new ResponseError<Error>(
+        Error('Unable to toggle task'),
+        'INTERNAL_SERVER_ERROR',
+      );
+    }
+    if (toggle instanceof Prisma.PrismaClientKnownRequestError) {
+      throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
+        toggle,
+        'INTERNAL_SERVER_ERROR',
+      );
+    }
+    return new DefaultResponse<Prisma.TaskUpdateArgs['data'] | boolean>(
+      toggle,
       'OK',
     );
   }

@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const URL = `http://${process.env.REACT_APP_HOSTNAME}` || "localhost";
-const PORT = `${process.env.REACT_APP_BACKEND_PORT}` || "3001";
+const baseURL = `http://${import.meta.env.VITE_DATABASE_URL}:${
+  import.meta.env.VITE_DATABASE_PORT || 3001
+}`;
 
-const api = axios.create({
-  baseURL: `${URL}:${PORT}`,
-});
+const api = axios.create({ baseURL });
 
 export const executeLogin = async (endpoint, body) => {
   try {
@@ -30,15 +29,8 @@ export const requestGet = async (endpoint) => {
   return data;
 };
 
-export const requestPost = async (endpoint, body, token) =>
+export const requestPostPut = async (endpoint, body, token) =>
   api.post(endpoint, body, {
-    headers: {
-      authorization: token,
-    },
-  });
-
-export const requestPut = async (endpoint, body, token) =>
-  api.put(endpoint, body, {
     headers: {
       authorization: token,
     },
