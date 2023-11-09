@@ -5,7 +5,7 @@ const baseURL = `http://${import.meta.env.VITE_DATABASE_URL}:${
 }`;
 
 const api = axios.create({ baseURL });
-
+// todo: tipar
 export const executeLogin = async (endpoint, body) => {
   try {
     const result = await api.post(endpoint, body);

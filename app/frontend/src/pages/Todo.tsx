@@ -47,7 +47,8 @@ const Todo: React.FC = () => {
     fetchAllTasks();
   }, [fetchAllTasks]);
 
-  if (!loadingHandlers || !tasksHandlers || !setTaskInput) return;
+  if (!loadingHandlers || !tasksHandlers || !setTaskInput || !fetchAllTasks)
+    return;
 
   return (
     <Flex
@@ -134,7 +135,7 @@ const Todo: React.FC = () => {
           </Box>
         </Box>
         {!isLoading ? (
-          <TasksTabs tasks={tasks || []} />
+          <TasksTabs tasks={tasks || []} fetchAllTasks={fetchAllTasks} />
         ) : (
           <CircularProgress
             isIndeterminate

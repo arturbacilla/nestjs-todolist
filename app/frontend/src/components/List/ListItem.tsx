@@ -18,27 +18,20 @@ import { ITask } from "../../types/tabs";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { ITasksContext } from "../../types/context";
 import TasksContext from "../../context/TasksContext";
-import { requestDelete, requestGet, requestPostPut } from "../../services/api";
+import { requestDelete, requestPostPut } from "../../services/api";
 
-type TListItem = { task: ITask };
+type TListItem = {
+  task: ITask;
+  fetchAllTasks: () => Promise<void> | undefined;
+};
 
-const ListItem: React.FC<TListItem> = ({ task }) => {
-  const { updatingHandlers, tasksHandlers } =
+const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
+  const { updatingHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
-  const [, setTasks] = tasksHandlers || [];
   const [isUpdating, setIsUpdating] = updatingHandlers || [];
 
   const [showActions, setShowActions] = useBoolean(false);
-
-  const fetchAllTasks = () => {
-    if (!setTasks || !setIsUpdating) return;
-    const endpoint = "/tasks";
-    return requestGet(endpoint)
-      .then((result) => setTasks(result.data.message))
-      .catch((reject) => console.error(reject))
-      .finally(() => setIsUpdating(null));
-  };
 
   const handleCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -47,10 +40,11 @@ const ListItem: React.FC<TListItem> = ({ task }) => {
     const endpoint = `/task/${task.id}`;
 
     return requestPostPut(endpoint, { status: e.target.checked }, "")
+      .then(() => fetchAllTasks())
       .catch((reject) => {
         // todo: adicionar um popup notificando erro
       })
-      .finally(() => fetchAllTasks());
+      .finally(() => setIsUpdating(null));
   };
 
   const handleDelete = async () => {
@@ -58,10 +52,11 @@ const ListItem: React.FC<TListItem> = ({ task }) => {
     setIsUpdating(task.id);
     const endpoint = `/task/${task.id}`;
     return requestDelete(endpoint, "")
+      .then(() => fetchAllTasks())
       .catch((reject) => {
         // todo: adicionar um popup notificando erro
       })
-      .finally(() => fetchAllTasks());
+      .finally(() => setIsUpdating(null));
   };
 
   return (

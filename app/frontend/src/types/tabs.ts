@@ -16,6 +16,7 @@ export interface ITask {
 
 export interface ITabs {
   tasks: ITask[];
+  fetchAllTasks: () => Promise<void> | undefined;
 }
 
 export interface ITaksList extends ITabs {
