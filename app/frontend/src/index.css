@@ -54,6 +54,13 @@ h1 {
   box-shadow: none !important;
 }
 
+                  
+.chakra-checkbox > .chakra-checkbox__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

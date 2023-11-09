@@ -17,13 +17,18 @@ const NewTask: React.FC<NewTaskPopover> = ({
         defaultValue={defaultName}
         value={defaultName}
         size="sm"
+        isReadOnly
       />
       <TextInput label="Description" id="description" size="sm" />
       <ButtonGroup display="flex" justifyContent="flex-end">
         <Button variant="outline" size="xs" onClick={onCancel}>
           Cancel
         </Button>
-        <Button isDisabled size="xs" colorScheme="orange">
+        <Button
+          isDisabled={!defaultName || defaultName === "" || !defaultName.length}
+          size="xs"
+          colorScheme="orange"
+        >
           Save
         </Button>
       </ButtonGroup>

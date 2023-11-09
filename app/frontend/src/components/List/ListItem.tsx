@@ -109,7 +109,14 @@ const ListItem: React.FC<TListItem> = ({ task }) => {
                 </Text>
               </Box>
             ) : (
-              <Box flex="1" textAlign="left" verticalAlign="middle">
+              <Box
+                flex="1"
+                textAlign="left"
+                verticalAlign="middle"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
                 <Checkbox
                   colorScheme="orange"
                   defaultChecked={task.status === "COMPLETED"}
@@ -131,7 +138,7 @@ const ListItem: React.FC<TListItem> = ({ task }) => {
                 </Checkbox>
               </Box>
             )}
-            <Flex alignItems="center" alignSelf="flex-end">
+            <Flex alignItems="center" alignSelf="center" justifySelf="flex-end">
               {showActions && (
                 <Fade in={showActions}>
                   <Button size="xs">
