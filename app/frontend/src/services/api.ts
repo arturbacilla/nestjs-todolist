@@ -36,4 +36,11 @@ export const requestPostPut = async (endpoint, body, token) =>
     },
   });
 
+export const requestDelete = async (endpoint, token) =>
+  api.delete(endpoint, {
+    headers: {
+      authorization: token,
+    },
+  });
+
 export default api;

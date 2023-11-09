@@ -18,7 +18,7 @@ import { ITask } from "../../types/tabs";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { ITasksContext } from "../../types/context";
 import TasksContext from "../../context/TasksContext";
-import { requestGet, requestPostPut } from "../../services/api";
+import { requestDelete, requestGet, requestPostPut } from "../../services/api";
 
 type TListItem = { task: ITask };
 
@@ -47,6 +47,17 @@ const ListItem: React.FC<TListItem> = ({ task }) => {
     const endpoint = `/task/${task.id}`;
 
     return requestPostPut(endpoint, { status: e.target.checked }, "")
+      .catch((reject) => {
+        // todo: adicionar um popup notificando erro
+      })
+      .finally(() => fetchAllTasks());
+  };
+
+  const handleDelete = async () => {
+    if (!setIsUpdating) return;
+    setIsUpdating(task.id);
+    const endpoint = `/task/${task.id}`;
+    return requestDelete(endpoint, "")
       .catch((reject) => {
         // todo: adicionar um popup notificando erro
       })
@@ -126,7 +137,7 @@ const ListItem: React.FC<TListItem> = ({ task }) => {
                   <Button size="xs">
                     <EditIcon color="black.500" />
                   </Button>
-                  <Button size="xs">
+                  <Button size="xs" onClick={handleDelete}>
                     <DeleteIcon color="black.500" />
                   </Button>
                 </Fade>
