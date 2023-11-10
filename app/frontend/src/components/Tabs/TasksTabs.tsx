@@ -8,7 +8,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { ITabs } from "../../types/tabs";
+import { ITabs } from "../../types/task";
 import TaskList from "../List/TaskList";
 
 const TasksTabs: React.FC<ITabs> = ({ tasks, fetchAllTasks }) => {

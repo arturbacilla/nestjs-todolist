@@ -1,5 +1,5 @@
 import React from "react";
-import { ITaksList } from "../../types/tabs";
+import { ITaksList } from "../../types/task";
 import { Accordion, TabPanel, Text } from "@chakra-ui/react";
 import ListItem from "./ListItem";
 

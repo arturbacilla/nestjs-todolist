@@ -15,7 +15,7 @@ import {
   useBoolean,
   useToast,
 } from "@chakra-ui/react";
-import { ITask, TFetchAllTasks } from "../../types/tabs";
+import { ITask, TFetchAllTasks } from "../../types/task";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { ITasksContext } from "../../types/context";
 import TasksContext from "../../context/TasksContext";
@@ -28,10 +28,11 @@ type TListItem = {
 
 const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
   const toast = useToast();
-  const { updatingHandlers } =
+  const { updatingHandlers, editHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
   const [isUpdating, setIsUpdating] = updatingHandlers || [];
+  const [, setIsEditing] = editHandlers || [];
 
   const [showActions, setShowActions] = useBoolean(false);
 
@@ -41,7 +42,7 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
     setIsUpdating(task.id);
     const endpoint = `/task/${task.id}`;
 
-    return requestPostPut(endpoint, { status: e.target.checked }, "")
+    return requestPostPut(endpoint, { status: e.target.checked }, "", "post")
       .then(() => fetchAllTasks())
       .catch((reject) => {
         console.error(reject);
@@ -79,6 +80,7 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
       });
   };
 
+  if (!setIsEditing) return null;
   return (
     <AccordionItem
       m="0 8px 0 0"
@@ -112,7 +114,6 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
                 />
                 <Text
                   align="left"
-                  casing="capitalize"
                   fontSize="sm"
                   as={task.status === "COMPLETED" ? "s" : "span"}
                   fontWeight="semibold"
@@ -143,10 +144,11 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
                 >
                   <Text
                     align="left"
-                    casing="capitalize"
                     fontSize="sm"
                     as={task.status === "COMPLETED" ? "s" : "span"}
-                    fontWeight="semibold"
+                    fontWeight={
+                      task.status === "COMPLETED" ? "medium" : "semibold"
+                    }
                   >
                     {task.title}
                   </Text>
@@ -156,7 +158,7 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
             <Flex alignItems="center" alignSelf="center" justifySelf="flex-end">
               {showActions && (
                 <Fade in={showActions}>
-                  <Button size="xs">
+                  <Button size="xs" onClick={() => setIsEditing(task.id)}>
                     <EditIcon color="black.500" />
                   </Button>
                   <Button size="xs" onClick={handleDelete}>
