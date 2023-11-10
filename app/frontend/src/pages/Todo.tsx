@@ -14,6 +14,7 @@ import {
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -153,17 +154,24 @@ const Todo: React.FC = () => {
                     </Button>
                   </PopoverTrigger>
                 </InputLeftElement>
-                <Input
-                  onChange={(e) => setTaskInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && fastSubmit()}
-                  type="text"
-                  size="sm"
-                  value={taskInput}
-                  borderColor="gray.400"
-                  borderRadius={4}
-                  placeholder="New task"
-                  _placeholder={{ opacity: 0.2, color: "inherit" }}
-                />
+
+                <Tooltip
+                  placement="bottom-start"
+                  label="Press enter to fast-add and press + to add description"
+                >
+                  <Input
+                    onChange={(e) => setTaskInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && fastSubmit()}
+                    type="text"
+                    size="sm"
+                    value={taskInput}
+                    borderColor="gray.400"
+                    borderRadius={4}
+                    placeholder="New task"
+                    pl={8}
+                    _placeholder={{ opacity: 0.2, color: "inherit" }}
+                  />
+                </Tooltip>
               </InputGroup>
               <PopoverContent
                 backgroundColor="white"
