@@ -13,8 +13,9 @@ import {
   Flex,
   Text,
   useBoolean,
+  useToast,
 } from "@chakra-ui/react";
-import { ITask } from "../../types/tabs";
+import { ITask, TFetchAllTasks } from "../../types/tabs";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { ITasksContext } from "../../types/context";
 import TasksContext from "../../context/TasksContext";
@@ -22,10 +23,11 @@ import { requestDelete, requestPostPut } from "../../services/api";
 
 type TListItem = {
   task: ITask;
-  fetchAllTasks: () => Promise<void> | undefined;
+  fetchAllTasks: TFetchAllTasks;
 };
 
 const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
+  const toast = useToast();
   const { updatingHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
@@ -42,9 +44,14 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
     return requestPostPut(endpoint, { status: e.target.checked }, "")
       .then(() => fetchAllTasks())
       .catch((reject) => {
-        // todo: adicionar um popup notificando erro
-      })
-      .finally(() => setIsUpdating(null));
+        console.error(reject);
+        return toast({
+          id: "error-checking",
+          title: "Error updating task status",
+          status: "error",
+          isClosable: true,
+        });
+      });
   };
 
   const handleDelete = async () => {
@@ -52,11 +59,24 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
     setIsUpdating(task.id);
     const endpoint = `/task/${task.id}`;
     return requestDelete(endpoint, "")
-      .then(() => fetchAllTasks())
-      .catch((reject) => {
-        // todo: adicionar um popup notificando erro
+      .then(() => {
+        fetchAllTasks();
+        return toast({
+          id: "success-deleting",
+          title: `'${task.title}' removed successfully`,
+          status: "info",
+          isClosable: true,
+        });
       })
-      .finally(() => setIsUpdating(null));
+      .catch((reject) => {
+        console.error(reject);
+        return toast({
+          id: "error-deleting",
+          title: `Error deleting task '${task.title}'`,
+          status: "error",
+          isClosable: true,
+        });
+      });
   };
 
   return (

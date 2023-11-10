@@ -14,9 +14,11 @@ export interface ITask {
   conclusionDate?: Date;
 }
 
+export type TFetchAllTasks = () => Promise<string | number | void> | undefined;
+
 export interface ITabs {
   tasks: ITask[];
-  fetchAllTasks: () => Promise<void> | undefined;
+  fetchAllTasks: TFetchAllTasks;
 }
 
 export interface ITaksList extends ITabs {

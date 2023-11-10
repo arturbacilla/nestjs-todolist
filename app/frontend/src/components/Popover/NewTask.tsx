@@ -14,12 +14,16 @@ const NewTask: React.FC<NewTaskPopover> = ({
         label="Task name"
         id="task-name"
         ref={firstFieldRef}
-        defaultValue={defaultName}
         value={defaultName}
         size="sm"
         isReadOnly
       />
-      <TextInput label="Description" id="description" size="sm" />
+      <TextInput
+        label="Description"
+        id="description"
+        size="sm"
+        defaultValue=""
+      />
       <ButtonGroup display="flex" justifyContent="flex-end">
         <Button variant="outline" size="xs" onClick={onCancel}>
           Cancel

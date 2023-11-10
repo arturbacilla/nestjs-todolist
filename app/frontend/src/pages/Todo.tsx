@@ -15,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import TasksTabs from "../components/Tabs/TasksTabs";
@@ -25,23 +26,37 @@ import FocusLock from "react-focus-lock";
 import { requestGet } from "../services/api";
 
 const Todo: React.FC = () => {
-  const { loadingHandlers, tasksHandlers, newTaskInput } =
+  const toast = useToast();
+  const { onOpen, onClose, isOpen } = useDisclosure();
+  const firstFieldRef = React.useRef(null);
+
+  const { loadingHandlers, tasksHandlers, newTaskInput, updatingHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
   const [tasks, setTasks] = tasksHandlers || [];
   const [taskInput, setTaskInput] = newTaskInput || [];
   const [isLoading, setIsLoading] = loadingHandlers || [];
-  const { onOpen, onClose, isOpen } = useDisclosure();
-  const firstFieldRef = React.useRef(null);
+  const [, setIsUpdating] = updatingHandlers || [];
 
   const fetchAllTasks = useCallback(() => {
-    if (!setTasks || !setIsLoading) return;
+    if (!setTasks || !setIsLoading || !setIsUpdating) return;
     const endpoint = "/tasks";
     return requestGet(endpoint)
       .then((result) => setTasks(result.data.message))
-      .catch((reject) => console.error(reject))
-      .finally(() => setIsLoading(false));
-  }, [setTasks, setIsLoading]);
+      .catch((reject) => {
+        console.error(reject);
+        return toast({
+          id: "error-1",
+          title: "Error on loading tasks",
+          status: "error",
+          isClosable: true,
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsUpdating(null);
+      });
+  }, [setTasks, setIsLoading, setIsUpdating, toast]);
 
   useEffect(() => {
     fetchAllTasks();
