@@ -1,6 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './auth.decorator';
+import ResponseError from 'src/utils/error';
 
 @Controller('auth')
 export class AuthController {
@@ -10,6 +11,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+    const { email, password } = signInDto;
+    if (!email || !email.length || !password || !password.length) {
+      throw new ResponseError<Error>(Error('Invalid credentials'), 'FORBIDDEN');
+    }
+    return this.authService.signIn(email, password);
   }
 }
