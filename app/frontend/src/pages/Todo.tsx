@@ -1,5 +1,5 @@
 /// <reference types="vite-plugin-svgr/client" />
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import NotebookSVG from "../assets/notebook.svg?react";
 import {
   Box,
@@ -39,6 +39,7 @@ const Todo: React.FC = () => {
     newTaskInput,
     updatingHandlers,
     editHandlers,
+    errorHandlers,
   } = useContext<ITasksContext | null>(TasksContext) || {};
 
   const [tasks, setTasks] = tasksHandlers || [];
@@ -46,17 +47,25 @@ const Todo: React.FC = () => {
   const [isLoading, setIsLoading] = loadingHandlers || [];
   const [, setIsUpdating] = updatingHandlers || [];
   const [isEditing, setIsEditing] = editHandlers || [];
+  const [, setHasError] = errorHandlers || [];
 
   const fetchAllTasks = useCallback(() => {
-    if (!setTasks || !setIsLoading || !setIsUpdating || !setTaskInput) return;
+    if (
+      !setTasks ||
+      !setIsLoading ||
+      !setIsUpdating ||
+      !setTaskInput ||
+      !setHasError
+    )
+      return;
     const endpoint = "/tasks";
     return requestGet(endpoint)
       .then((result) => setTasks(result.data.message))
-      .catch((reject) => {
-        console.error(reject);
+      .catch(() => {
+        setHasError(true);
         return toast({
-          id: "error-1",
-          title: "Error on loading tasks",
+          id: `error-load`,
+          title: "Error loading tasks",
           status: "error",
           isClosable: true,
         });
@@ -66,7 +75,7 @@ const Todo: React.FC = () => {
         setIsUpdating(null);
         setTaskInput("");
       });
-  }, [setTasks, setIsLoading, setIsUpdating, setTaskInput, toast]);
+  }, [setTasks, setIsLoading, setIsUpdating, setTaskInput, setHasError, toast]);
 
   const fastSubmit = async () => {
     if (!setIsLoading || !taskInput || taskInput === "") return;
@@ -94,8 +103,9 @@ const Todo: React.FC = () => {
   };
 
   useEffect(() => {
+    setHasError && setHasError(false);
     fetchAllTasks();
-  }, [fetchAllTasks]);
+  }, [fetchAllTasks, setHasError]);
 
   if (
     !loadingHandlers ||

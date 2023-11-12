@@ -7,4 +7,5 @@ export interface ITasksContext {
   tasksHandlers: HandlersTuples<ITask[]>;
   updatingHandlers: HandlersTuples<number | null>;
   editHandlers: HandlersTuples<number | null>;
+  errorHandlers: HandlersTuples<boolean>;
 }

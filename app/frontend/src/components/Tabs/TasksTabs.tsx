@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Divider,
   Tab,
@@ -10,8 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { ITabs } from "../../types/task";
 import TaskList from "../List/TaskList";
+import { ITasksContext } from "../../types/context";
+import TasksContext from "../../context/TasksContext";
 
 const TasksTabs: React.FC<ITabs> = ({ tasks, fetchAllTasks }) => {
+  const { errorHandlers } =
+    useContext<ITasksContext | null>(TasksContext) || {};
+  const [hasError] = errorHandlers || [];
+
   return (
     <Tabs variant="unstyled" overflow="hidden" h="100%">
       <TabList>
@@ -51,7 +57,9 @@ const TasksTabs: React.FC<ITabs> = ({ tasks, fetchAllTasks }) => {
           h="100%"
           color="gray.500"
         >
-          You have no tasks added. Start adding some!
+          {hasError
+            ? "Something wrong happened. Try reloading the page"
+            : "You have no tasks added. Start adding some!"}
         </Text>
       )}
     </Tabs>

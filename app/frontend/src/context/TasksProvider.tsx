@@ -11,6 +11,7 @@ const TasksProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [tasks, setTasks] = useState<ITask[]>(taskList);
   const [isUpdating, setisUpdating] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const values: ITasksContext = {
     loadingHandlers: [isLoading, setIsLoading],
@@ -18,6 +19,7 @@ const TasksProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     tasksHandlers: [tasks, setTasks],
     updatingHandlers: [isUpdating, setisUpdating],
     editHandlers: [isEditing, setIsEditing],
+    errorHandlers: [hasError, setHasError],
   };
 
   return (
