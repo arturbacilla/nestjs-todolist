@@ -86,8 +86,8 @@ Go to the project directory
 </picture>
 ou 
  <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/apple-ffffff?style=for-the-badge&logo=apple&logoColor=white">
-  <img alt="Apple" src="https://img.shields.io/badge/apple-ffffff?style=for-the-badge&logo=apple&logoColor=white">
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/apple-000000?style=for-the-badge&logo=apple&logoColor=white">
+  <img alt="Apple" src="https://img.shields.io/badge/apple-ffffff?style=for-the-badge&logo=apple&logoColor=black">
 </picture>
 </summary>
 Para usuários de linux (testado com ZSH e BASH) ou mac (não testado), executar o seguinte comando na pasta raiz do projeto e seguir as instruções: 
