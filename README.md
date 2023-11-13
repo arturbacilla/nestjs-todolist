@@ -91,12 +91,16 @@ ou
 </picture>
 </summary>
 Para usuários de linux (testado com ZSH e BASH) ou mac (não testado), executar o seguinte comando na pasta raiz do projeto e seguir as instruções: 
+
  ```bash
   ./nobuzz
+
 ```
  As vezes pode ser necessário permitir a execução do script com o comando:
+
  ```bash
   sudo chmod +x ./nobuzz
+  
 ```
 </details>
 
