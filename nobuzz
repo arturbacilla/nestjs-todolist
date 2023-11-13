@@ -61,43 +61,7 @@ Help(){
 echo
 echo -e "Usage: ${GREEN}nobuzz${NC} [OPTIONS]"
 echo -e "Example without options:" 
-echo -e " ${GREEN}nobuzz${NC}${X3TAB} - List all projects in your nobuzz_DIR"
-echo -e " ${GREEN}nobuzz${NC} ${RED}<project>${NC}${X2TAB} - Goto(cd) to specified project" 
-echo -e " ${GREEN}nobuzz${NC} ris ${RED}<frontend|backend>${NC} - Goto(cd) to specified project stack"
-echo
-echo -e "Options: ${RED}*${NC} are mandatory parameters"
-echo -e "${TAB}${YELLOW}-o${NC}${TAB}Open vscode in the project folder when executing command."
-echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-o ${CYAN}ris${NC}${RED}*${NC}"
-echo
-echo -e "${TAB}${YELLOW}-c${NC}${TAB}Clone some repository on nobuzz_DIR."
-echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-c ${CYAN}<repo url>${NC}${RED}*${NC}"
-echo
-echo -e "${TAB}${YELLOW}-l${NC}${TAB}Goto selected lambda folder."
-echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-l ${CYAN}<project>${RED}*${NC} ${CYAN}<lambda name>${RED}*${NC}"
-echo
-echo -e "${TAB}${YELLOW}-q${NC}${TAB}Find a lambda from some graphql query/mutation."
-echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-q ${CYAN}<project>${RED}*${NC} ${CYAN}<query name>${RED}*${NC}"
-echo
-echo -e "${YELLOW}-h, --help${NC}${TAB}Show this help message."
-echo
-echo -e "${TAB}${YELLOW}--ip${NC}${TAB}Get your external IP address."
-echo -e "${X2TAB}Example: ${GREEN}nobuzz${NC} ${YELLOW}--ip${NC}"
-echo
-echo -e "${YELLOW}--lambda-watch${NC}${TAB}Watch a lambda output (from cloudwatch logs) directly on your terminal."
-echo -e "${X2TAB}Example:${GREEN}nobuzz${NC} ${YELLOW}--lambda-watch ${CYAN}<project>${RED}*${NC} ${CYAN}<lambda name>${RED}*${NC}"
-echo -e "${X2TAB}Example:${GREEN}nobuzz${NC} ${YELLOW}--lambda-watch ${CYAN}<project>${RED}*${NC} ${CYAN}<lambda name>${RED}*${NC} ${CYAN}<--last|#<s,m,h,d,w>"
-
-echo
-echo -e "${YELLOW}--newpr${NC}${X2TAB} Create new pull request from current branch to target branch."
-echo -e "${X2TAB}Example:${GREEN}nobuzz${NC} ${YELLOW}--newpr ${CYAN}<project>${RED}*${NC} ${CYAN}\"v1.148\"${RED}*${NC}"
-echo
-echo -e "${YELLOW}--newicon${NC}${TAB}Download icon from url and add it to <IconSVG> library."
-echo -e "${X2TAB}Example: ${GREEN}nobuzz${NC} ${YELLOW}--newicon ${CYAN}<project>${RED}*${NC} ${CYAN}<new icon name>${RED}*${NC} ${CYAN}<.svg icon url>${RED}*${NC}"
-echo
-echo -e "${YELLOW}--translation${NC}${TAB}Add/Find a frontend translation"
-echo -e "${X2TAB}Examples:"
-echo -e "${X2TAB}${GREEN}  nobuzz${NC} ${YELLOW}--translation ${RED}add*${NC} ${CYAN}<project>${RED}*${NC}"
-echo -e "${X2TAB}${GREEN}  nobuzz${NC} ${YELLOW}--translation ${RED}find*${NC} ${CYAN}<project>${RED}*${NC} ${CYAN}<id|text>${RED}*${NC}"
+echo -e " ${GREEN}nobuzz${NC}${X3TAB} - Install everything, setup .envs and start project"
 exit 0 
 }
 
@@ -207,7 +171,9 @@ start () {
 	cd ./app/backend || (MsgError "Failed to reach backend folder" ; exit 1) &&
 	yarn install &&
 
-	cd ../frontend || (MsgError "Failed to reach frontend folder" ; exit 1) &&
+	cd ../frontend &&
+
+	if [ $? == 1 ]; then MsgError "Failed to reach frontend folder"; exit 1; fi
 	
 	yarn install &&
 
