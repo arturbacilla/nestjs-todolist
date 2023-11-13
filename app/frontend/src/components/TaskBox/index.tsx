@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import TextInput from "../Inputs/TextInput";
-import { Button, ButtonGroup, Stack, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Stack,
+  Text,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
 import { TaskBoxProps } from "../../types/general";
 import { requestPostPut } from "../../services/api";
 import { AxiosError } from "axios";
@@ -20,10 +28,16 @@ const TaskBox: React.FC<TaskBoxProps> = ({
 
   useEffect(() => {
     setTitle(defaultName);
+    setDescription(undefined);
     if (type === "edit") {
       setDescription(task?.description);
     }
   }, [defaultName, task?.description, type]);
+
+  const handleClose = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setDescription("");
+    onCancel(e);
+  };
 
   const handleSubmit = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -44,8 +58,7 @@ const TaskBox: React.FC<TaskBoxProps> = ({
     )
       .then(() => {
         fetchAllTasks();
-        onCancel(e);
-
+        handleClose(e);
         const message = `Task '${
           type === "new"
             ? `${defaultName}' created`
@@ -72,26 +85,40 @@ const TaskBox: React.FC<TaskBoxProps> = ({
 
   return (
     <Stack spacing={4}>
-      <TextInput
-        label="Task name"
-        id="task-name"
-        name="taskName"
-        ref={firstFieldRef}
-        value={title}
-        size="sm"
-        onChange={(e) => setTitle(e.target.value)}
-        isReadOnly={type === "new"}
-        isDisabled={type === "new"}
-      />
-      <TextInput
-        label="Description"
-        id="description"
-        size="sm"
-        onChange={(e) => setDescription(e.target.value)}
-        defaultValue={type === "edit" ? task?.description : ""}
-      />
+      <Box>
+        {type === "edit" && (
+          <Text variant="label" fontSize="0.7rem" p={0}>
+            Task Name
+          </Text>
+        )}
+        <TextInput
+          label="Task name"
+          id="task-name"
+          name="taskName"
+          ref={firstFieldRef}
+          value={title}
+          size="sm"
+          onChange={(e) => setTitle(e.target.value)}
+          isReadOnly={type === "new"}
+          isDisabled={type === "new"}
+        />
+      </Box>
+      <Box>
+        {type === "edit" && (
+          <Text variant="label" fontSize="0.7rem" p={0}>
+            Description
+          </Text>
+        )}
+        <Textarea
+          placeholder="Description"
+          id="description"
+          size="sm"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description}
+        />
+      </Box>
       <ButtonGroup display="flex" justifyContent="flex-end">
-        <Button variant="outline" size="xs" onClick={onCancel}>
+        <Button variant="outline" size="xs" onClick={handleClose}>
           Cancel
         </Button>
         <Button

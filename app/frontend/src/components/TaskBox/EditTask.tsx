@@ -25,7 +25,7 @@ const EditTask: React.FC<IEditTask> = ({
     <Modal isCentered isOpen={isOpen} onClose={() => onClose(null)}>
       <ModalOverlay />
       <ModalContent>
-        <ModalBody>
+        <ModalBody pt={6}>
           <TaskBox
             type="edit"
             onCancel={() => onClose(null)}
