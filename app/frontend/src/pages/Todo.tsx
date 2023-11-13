@@ -1,5 +1,5 @@
 /// <reference types="vite-plugin-svgr/client" />
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import NotebookSVG from "../assets/notebook.svg?react";
 import {
   Box,
@@ -28,13 +28,11 @@ import FocusLock from "react-focus-lock";
 import { requestGet, requestPostPut } from "../services/api";
 import { AxiosError } from "axios";
 import useVerifyToken from "../hooks/useVerifyToken";
-import { useNavigate } from "react-router-dom";
 
 const Todo: React.FC = () => {
   const tokenValid = useVerifyToken();
   const toast = useToast();
   const addTask = useDisclosure();
-  const navigate = useNavigate();
 
   const firstFieldRef = React.useRef(null);
   const {

@@ -21,7 +21,6 @@ import { ITasksContext } from "../../types/context";
 import TasksContext from "../../context/TasksContext";
 import { requestDelete, requestPostPut } from "../../services/api";
 import { format } from "date-fns";
-import { useIntl } from "react-intl";
 
 type TListItem = {
   task: ITask;
@@ -30,7 +29,7 @@ type TListItem = {
 
 const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
   const toast = useToast();
-  const { updatingHandlers, editHandlers, userHandlers } =
+  const { updatingHandlers, editHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
   const [isUpdating, setIsUpdating] = updatingHandlers || [];
