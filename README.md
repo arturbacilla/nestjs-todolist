@@ -3,7 +3,7 @@
 
 ![demo screenshot](/screenshot.png)
 
-Descrição
+Este projeto envolve a criação de um sistema de gerenciamento de tarefas com um back-end desenvolvido em NestJS e um front-end em React. No back-end, configuramos um servidor NestJS, estabelecemos um banco de dados PostgreSQL e implementamos modelos de dados para representar tarefas. Além disso, criamos endpoints RESTful com autenticação JWT para ações de criação, listagem, atualização e exclusão de tarefas. No front-end, desenvolvemos uma interface de usuário intuitiva que exibe e permite a edição de tarefas, incluindo autenticação de usuário. Enfrentamos desafios adicionais, como a criação de Dockerfiles e docker-compose.yml para orquestrar contêineres, a adição de funcionalidades de marcação de tarefas e a implementação de testes para garantir a qualidade do código. Estamos abertos a dúvidas e feedback para aprimorar o projeto.
 
 ## Autores
 
