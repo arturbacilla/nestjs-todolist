@@ -9,6 +9,7 @@ export class TaskService {
   async addTask({
     title,
     description,
+    authorId,
   }): Promise<
     Prisma.TaskCreateArgs['data'] | Prisma.PrismaClientKnownRequestError
   > {
@@ -17,20 +18,25 @@ export class TaskService {
         data: {
           title,
           description: description || null,
+          authorId,
         },
       });
       return created;
     } catch (error) {
+      console.error(error);
       return error;
     }
   }
 
-  async getTasks(): Promise<
+  async getTasks(
+    authorId: number,
+  ): Promise<
     Prisma.TaskCreateArgs['data'][] | Prisma.PrismaClientKnownRequestError
   > {
     try {
-      return (await this.prisma.task.findMany()) || [];
+      return (await this.prisma.task.findMany({ where: { authorId } })) || [];
     } catch (error) {
+      console.error(error);
       return error;
     }
   }

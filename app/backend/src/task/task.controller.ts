@@ -11,14 +11,15 @@ import { TaskService } from './task.service';
 import { Prisma } from '@prisma/client';
 import DefaultResponse from '../utils/default';
 import ResponseError from '../utils/error';
+import { NewTaskDto, ToggleStatusDto, UpdateTaskDto } from './types';
 
 @Controller()
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
-  @Get('tasks')
-  async getTasks() {
-    const allTasks = await this.taskService.getTasks();
+  @Get('tasks/:id')
+  async getTasks(@Param('id') userId: string) {
+    const allTasks = await this.taskService.getTasks(Number(userId));
     if (!allTasks || allTasks instanceof Prisma.PrismaClientKnownRequestError) {
       throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
         allTasks as Prisma.PrismaClientKnownRequestError,
@@ -32,11 +33,12 @@ export class TaskController {
   }
 
   @Post('task')
-  async addTask(@Body() body: any) {
-    const { title, description } = body || {};
+  async addTask(@Body() body: NewTaskDto) {
+    const { title, description, authorId } = body || {};
     const added = await this.taskService.addTask({
       title,
       description: description || undefined,
+      authorId,
     });
     if (!added || added instanceof Prisma.PrismaClientKnownRequestError) {
       throw new ResponseError<Prisma.PrismaClientKnownRequestError>(
@@ -48,7 +50,7 @@ export class TaskController {
   }
 
   @Get('task/:id')
-  async getTask(@Param('id') id: number) {
+  async getTask(@Param('id') id: string) {
     const task = await this.taskService.getTask({ id });
     if (!task)
       throw new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
@@ -67,8 +69,12 @@ export class TaskController {
   @Post('task/:id')
   async toggleTask(
     @Param('id') id: number,
-    @Body() { status }: { status: boolean },
+    @Body() { status }: ToggleStatusDto,
   ) {
+    const task = await this.taskService.getTask({ id });
+    if (!task)
+      throw new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
+
     const toggle = await this.taskService.toggleTask(id, status);
     if (!toggle) {
       throw new ResponseError<Error>(
@@ -89,7 +95,7 @@ export class TaskController {
   }
 
   @Put('task/:id')
-  async updateTask(@Param('id') id: number, @Body() payload: any) {
+  async updateTask(@Param('id') id: number, @Body() payload: UpdateTaskDto) {
     const updated = await this.taskService.updateTask(id, payload);
     if (!updated) {
       throw new ResponseError<Error>(Error('Task not found'), 'NOT_FOUND');
