@@ -12,8 +12,11 @@ Este projeto envolve a criação de um sistema de gerenciamento de tarefas com u
 ## Execução Local
 
 #### Dependências necessárias:
+
 **Yarn (classic):** @1.22.19
+
 **docker-engine:** com compose
+
 **node**: >=18.18.2
 
 Clone the project
