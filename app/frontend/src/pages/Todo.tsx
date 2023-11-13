@@ -14,6 +14,7 @@ import {
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
+  Text,
   Tooltip,
   useDisclosure,
   useToast,
@@ -138,7 +139,8 @@ const Todo: React.FC = () => {
     !setTaskInput ||
     !fetchAllTasks ||
     !setIsLoading ||
-    !setIsEditing
+    !setIsEditing ||
+    !storeUser
   )
     return;
 
@@ -158,6 +160,9 @@ const Todo: React.FC = () => {
           alignItems="stretch"
           overflowY="hidden"
         >
+          <Text fontSize="0.7rem" color="gray.500">
+            Hello {storeUser.userName}!! What is going to be today?
+          </Text>
           <Box
             id="add-header"
             w="100%"
