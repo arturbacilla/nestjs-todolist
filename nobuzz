@@ -1,0 +1,226 @@
+#!/bin/bash
+
+export TAB='\t'
+export X2TAB='\t\t'
+export X3TAB='\t\t\t'
+export RED='\033[0;31m'		#error
+export CYAN='\033[0;36m'	#info
+export GREEN='\033[0;32m'	#success
+export YELLOW='\033[1;33m'	#warn
+export BOLD='\e[1m'			# Bold text
+export NB='\e[0m'			# Remove bold
+export NC='\033[0m'
+export SHELL_NAME=${SHELL##*\/}
+export SHELL_CONFIG="";
+
+echo -e "${NC}" &>/dev/null
+
+#-----Funções para padronizar mensagens-------
+
+MsgInfo() {
+	echo -e "${CYAN}INFO>>${TAB}${NC}$1${NC}"
+}
+
+MsgSuccess() {
+	echo -e "${GREEN}OK<3${TAB}${NC}$1${NC}"	
+}
+
+MsgWarn() {
+	echo -e "${YELLOW}WARN++${TAB}${NC}$1${NC}"	
+}
+
+MsgError() {
+	echo -e "${RED}ERROR!!${TAB}${NC}$1${NC}"	
+}
+
+readYNInput() {
+    while true; do
+		echo -ne "${BOLD}$1${NB}:(y/n) "
+        read -n 1 -r answer
+        case "$answer" in
+            [YySs]) return 0;;  
+            [Nn]) return 1 ;;
+            *) echo -e "\nInvalid input. Please try again." ;;
+        esac
+    done
+}
+
+boldQuestion() {
+	echo -ne "${BOLD}$1:${NB} "
+}
+
+readBoldWithSuggestion() {
+	answer=""
+	while [[ -z "$answer" || ! "$answer" =~ [[:alnum:]] ]]; do
+		read -er -i "$1" answer
+	done
+	echo "$answer"
+}
+
+Help(){
+echo
+echo -e "Usage: ${GREEN}nobuzz${NC} [OPTIONS]"
+echo -e "Example without options:" 
+echo -e " ${GREEN}nobuzz${NC}${X3TAB} - List all projects in your nobuzz_DIR"
+echo -e " ${GREEN}nobuzz${NC} ${RED}<project>${NC}${X2TAB} - Goto(cd) to specified project" 
+echo -e " ${GREEN}nobuzz${NC} ris ${RED}<frontend|backend>${NC} - Goto(cd) to specified project stack"
+echo
+echo -e "Options: ${RED}*${NC} are mandatory parameters"
+echo -e "${TAB}${YELLOW}-o${NC}${TAB}Open vscode in the project folder when executing command."
+echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-o ${CYAN}ris${NC}${RED}*${NC}"
+echo
+echo -e "${TAB}${YELLOW}-c${NC}${TAB}Clone some repository on nobuzz_DIR."
+echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-c ${CYAN}<repo url>${NC}${RED}*${NC}"
+echo
+echo -e "${TAB}${YELLOW}-l${NC}${TAB}Goto selected lambda folder."
+echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-l ${CYAN}<project>${RED}*${NC} ${CYAN}<lambda name>${RED}*${NC}"
+echo
+echo -e "${TAB}${YELLOW}-q${NC}${TAB}Find a lambda from some graphql query/mutation."
+echo -e "${X2TAB}Example: ${GREEN}nobuzz ${YELLOW}-q ${CYAN}<project>${RED}*${NC} ${CYAN}<query name>${RED}*${NC}"
+echo
+echo -e "${YELLOW}-h, --help${NC}${TAB}Show this help message."
+echo
+echo -e "${TAB}${YELLOW}--ip${NC}${TAB}Get your external IP address."
+echo -e "${X2TAB}Example: ${GREEN}nobuzz${NC} ${YELLOW}--ip${NC}"
+echo
+echo -e "${YELLOW}--lambda-watch${NC}${TAB}Watch a lambda output (from cloudwatch logs) directly on your terminal."
+echo -e "${X2TAB}Example:${GREEN}nobuzz${NC} ${YELLOW}--lambda-watch ${CYAN}<project>${RED}*${NC} ${CYAN}<lambda name>${RED}*${NC}"
+echo -e "${X2TAB}Example:${GREEN}nobuzz${NC} ${YELLOW}--lambda-watch ${CYAN}<project>${RED}*${NC} ${CYAN}<lambda name>${RED}*${NC} ${CYAN}<--last|#<s,m,h,d,w>"
+
+echo
+echo -e "${YELLOW}--newpr${NC}${X2TAB} Create new pull request from current branch to target branch."
+echo -e "${X2TAB}Example:${GREEN}nobuzz${NC} ${YELLOW}--newpr ${CYAN}<project>${RED}*${NC} ${CYAN}\"v1.148\"${RED}*${NC}"
+echo
+echo -e "${YELLOW}--newicon${NC}${TAB}Download icon from url and add it to <IconSVG> library."
+echo -e "${X2TAB}Example: ${GREEN}nobuzz${NC} ${YELLOW}--newicon ${CYAN}<project>${RED}*${NC} ${CYAN}<new icon name>${RED}*${NC} ${CYAN}<.svg icon url>${RED}*${NC}"
+echo
+echo -e "${YELLOW}--translation${NC}${TAB}Add/Find a frontend translation"
+echo -e "${X2TAB}Examples:"
+echo -e "${X2TAB}${GREEN}  nobuzz${NC} ${YELLOW}--translation ${RED}add*${NC} ${CYAN}<project>${RED}*${NC}"
+echo -e "${X2TAB}${GREEN}  nobuzz${NC} ${YELLOW}--translation ${RED}find*${NC} ${CYAN}<project>${RED}*${NC} ${CYAN}<id|text>${RED}*${NC}"
+exit 0 
+}
+
+manipulateFrontendEnv() {
+	if [ ! -e "./app/frontend/.env" ]; then
+		{
+		echo "VITE_DATABASE_URL=localhost"
+		echo "VITE_DATABASE_PORT=3001"
+	} > ./app/frontend/.env
+	else
+		MsgInfo "app/frontend/.env already exists. "
+			echo
+			cat ./app/frontend/.env
+			echo
+			readYNInput "Is this correct?(y/N) \n"
+			confirm=$?
+			echo
+			if [[ "$confirm" != 0 ]]; then 
+				rm -rf ./app/frontend/.env
+				MsgWarn "app/frontend/.env removido. Iniciando novamente"
+				manipulateFrontendEnv
+			fi
+	fi
+}
+
+manipulateBackendEnv() {
+	local POSTGRES_PASSWORD=$1
+	local POSTGRES_USER=$2
+	local POSTGRES_DB=$3
+
+	if [ ! -e "./app/backend/.env" ]; then
+			boldQuestion "Insira um segredo JWT(JWT_SECRET)? ${NB}ex: supersegredoJWT\n"
+			JWT_SECRET=$(readBoldWithSuggestion "supersegredoJWT")
+			{
+				echo "DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db/$POSTGRES_DB?schema=public" 
+				echo "JWT_SECRET=$JWT_SECRET"
+			} > ./app/backend/.env
+			if [[ $? == 0 ]]; then MsgSuccess "app/backend/.env created successfully"; else MsgError "Failed to create app/backend/.env"; exit 0; fi
+		else
+			MsgInfo "app/backend/.env already exists. "
+			echo
+			cat ./app/backend/.env
+			echo
+			readYNInput "Is this correct?(y/N) \n"
+			confirm=$?
+			echo
+			if [[ "$confirm" != 0 ]]; then 
+				rm -rf ./app/backend/.env
+				MsgWarn "app/backend/.env removido. Iniciando novamente"
+				manipulateBackendEnv
+			fi
+		fi
+}
+
+start () {
+	local POSTGRES_PASSWORD
+	local POSTGRES_USER
+	local POSTGRES_DB
+
+    if [ ! -e "./.env" ]; then 
+		MsgInfo "Iniciando setup do .env"
+		boldQuestion "Insira um password para o postgres(POSTGRES_PASSWORD)? ${NB}ex: password12345\n"
+		POSTGRES_PASSWORD=$(readBoldWithSuggestion "password12345")
+		boldQuestion "Insira um usuário para o postgres(POSTGRES_USER)? ${NB}ex: postgres\n"
+		POSTGRES_USER=$(readBoldWithSuggestion "postgres")
+		boldQuestion "Insira o nome da tabela(POSTGRES_DB)? ${NB}ex: nobuzz_db\n"
+		POSTGRES_DB=$(readBoldWithSuggestion "nobuzz_db")
+
+	{
+		echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" 
+		echo "POSTGRES_USER=$POSTGRES_USER"
+		echo "PGUSER=$POSTGRES_USER"
+		echo "POSTGRES_DB=$POSTGRES_DB"
+	} > .env
+
+		if [[ $? == 0 ]]; then MsgSuccess ".env created successfully"; else MsgError "Failed to create .env"; exit 0; fi
+
+	else 
+		MsgInfo ".env already exists. "
+		echo
+		cat .env
+		echo
+		readYNInput "Is this correct?(y/N) \n"
+		confirm=$?
+		echo
+		if [[ "$confirm" != 0 ]]; then 
+			rm -rf .env
+			MsgWarn ".env removido. Iniciando novamente"
+			start
+		fi
+		source .env
+		declare POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+		declare POSTGRES_USER=$POSTGRES_USER
+		declare POSTGRES_DB=$POSTGRES_DB
+
+
+	fi
+
+	manipulateBackendEnv "$POSTGRES_PASSWORD" "$POSTGRES_USER" "$POSTGRES_DB"
+	manipulateFrontendEnv
+	MsgSuccess "Everything setup correctly. Starting app."
+	docker compose up
+}
+
+main () {
+	export -f MsgInfo MsgSuccess MsgWarn MsgError
+    while getopts "h-:" option; do
+		case "${option}" in
+		-)
+			case "${OPTARG}" in
+	        help) Help;;
+			*)
+				if [ "$OPTERR" = 1 ] && [ "${OPTARG:0:1}" != ":" ]; then MsgError "Comando inválido: ${RED}--${OPTARG}${NC}" >&2 && return 0; fi
+				;;
+			esac
+			;;
+	    h) Help ;;
+		\?) MsgError "Invalid parameter. Check options with ${GREEN}nobuzz${NC} ${YELLOW}-h${NC}"
+			exit 0
+		 ;;
+		esac
+	done
+    start
+}
+
+main "$@"

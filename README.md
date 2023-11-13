@@ -70,30 +70,62 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd nobuzz-challenge
+  cd ./nobuzz-challenge
 
 ```
-<!-- Adicionar informações (caso necessário) sobre variáveis de ambiente aqui:>
-
-#### Variáveis de ambiente
-
-Adicionar as seguintes variáveis no arquivo .env localizado em <local>
-
-`API_KEY`
-
-`ANOTHER_API_KEY`
--->
 
 #### Execução:
 
+É necessario possuir o docker-engine (com docker compose) instalado para executar esse projeto.
 
 <details>
 <summary>
-Docker
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
+  <img alt="Linux" src="https://img.shields.io/badge/linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
+</picture>
+ou 
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/apple-ffffff?style=for-the-badge&logo=apple&logoColor=white">
+  <img alt="Apple" src="https://img.shields.io/badge/apple-ffffff?style=for-the-badge&logo=apple&logoColor=white">
+</picture>
 </summary>
-Instruções
+Para usuários de linux (testado com ZSH e BASH) ou mac (não testado), executar o seguinte comando na pasta raiz do projeto: ./nobuzz e seguir as instruções
 </details>
 
+<details>
+<summary>
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/windows-0078D4?style=for-the-badge&logo=windows10&logoColor=white">
+  <img alt="Windows" src="https://img.shields.io/badge/windows-0078D4?style=for-the-badge&logo=windows10&logoColor=white">
+</picture>
+</summary>
+Se você é usuário de Windows e usa git-bash ou algum terminal padrão UNIX, seguir os passos das instruções de Linux/Mac.
+
+Caso contrário, é necessário ter instalado o comando docker compose e alterar as variáveis de ambiente da seguinte forma:
+
+#### Variáveis de ambiente
+
+Renomeie o arquivo .env.example para .env localizado na raiz do projeto e insira as seguintes variáveis de ambiente (por exemplo):
+
+`POSTGRES_PASSWORD=algumpassword`
+`POSTGRES_USER=postgres`
+`PGUSER=postgres`
+`POSTGRES_DB=nobuzz_db`
+
+Além disso, 
+Renomear o arquivo ./app/backend/.env.example para ./app/backend/.env e inserir as variáveis de ambiente substituindo de acordo com as variáveis acima
+
+`DATABASE_URL=postgresql://<$POSTGRES_USER>:<$POSTGRES_PASSWORD>@db:5432/ <$POSTGRES_DB>?schema=public`
+
+Seguindo o exemplo acima ficaria desta forma:
+`DATABASE_URL=postgresql://postgres:algumpassword@db:5432/nobuzz_db?schema=public`
+
+`JWT_SECRET=algumsegredoJWT`
+
+e por último executar na pasta raiz do projeto:
+`docker compose up`
+</details>
 
 ## Feedback
 
