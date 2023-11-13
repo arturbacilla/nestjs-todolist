@@ -117,7 +117,7 @@ Caso contrário, é necessário ter instalado o comando docker compose e alterar
 
 #### Variáveis de ambiente
 
-Renomeie o arquivo .env.example para .env localizado na raiz do projeto e insira as seguintes variáveis de ambiente (por exemplo):
+Renomeie o arquivo `.env.example` localizado na raiz do projeto para `.env` e insira as seguintes variáveis de ambiente (por exemplo):
 
 `POSTGRES_PASSWORD=algumpassword`
 `POSTGRES_USER=postgres`
@@ -125,7 +125,7 @@ Renomeie o arquivo .env.example para .env localizado na raiz do projeto e insira
 `POSTGRES_DB=nobuzz_db`
 
 Além disso, 
-Renomear o arquivo ./app/backend/.env.example para ./app/backend/.env e inserir as variáveis de ambiente substituindo de acordo com as variáveis acima
+Renomear o arquivo `./app/backend/.env.example` para `./app/backend/.env` e inserir as variáveis de ambiente substituindo de acordo com as variáveis acima
 
 `DATABASE_URL=postgresql://<$POSTGRES_USER>:<$POSTGRES_PASSWORD>@db:5432/ <$POSTGRES_DB>?schema=public`
 
@@ -133,6 +133,8 @@ Seguindo o exemplo acima ficaria desta forma:
 `DATABASE_URL=postgresql://postgres:algumpassword@db:5432/nobuzz_db?schema=public`
 
 `JWT_SECRET=algumsegredoJWT`
+
+Além disso será necessário executar `yarn install` na pasta raíz e nas pastas do frontend e backend
 
 e por último executar na pasta raiz do projeto:
 `docker compose up`
