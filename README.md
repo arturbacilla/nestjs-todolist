@@ -27,7 +27,7 @@ Go to the project directory
 
 É necessario possuir o docker-engine (com docker compose) instalado para executar esse projeto.
 
-<details>
+<details open>
 <summary>
  <picture>
   <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
