@@ -1,6 +1,5 @@
 
-# Título
-Nobuzz Challenge - Todo List
+# Nobuzz Challenge - Todo List
 
 ![demo screenshot](/screenshot.png)
 
