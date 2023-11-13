@@ -157,6 +157,8 @@ start () {
 	local POSTGRES_USER
 	local POSTGRES_DB
 
+	if ! command -v "yarn" >/dev/null 2>&1; then MsgError "You need ${RED}yarn v1.22.19${NC} installed to run this project. Run ${RED}npm install -g yarn${NC}"; exit 1; fi
+
     if [ ! -e "./.env" ]; then 
 		MsgInfo "Iniciando setup do .env"
 		boldQuestion "Insira um password para o postgres(POSTGRES_PASSWORD)? ${NB}ex: password12345\n"
