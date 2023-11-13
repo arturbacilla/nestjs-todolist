@@ -18,13 +18,16 @@ import { AtSignIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { requestPostPut } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
+import NewUser from "../components/Modal/NewUser";
+import DefaultInput from "../components/Inputs/DefaultInput";
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const handleClick = () => setShowPassword(!showPassword);
   const toast = useToast();
+  const [openNewUser, setOpenNewUser] = useState<boolean>(false);
   const signIn = useSignIn();
   const navigate = useNavigate();
-  const handleClick = () => setShowPassword(!showPassword);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -96,7 +99,8 @@ const Login: React.FC = () => {
               w="50%"
               h="100%"
               alignItems="center"
-              justifyContent="space-between"
+              justifyContent="center"
+              gap={8}
               p={8}
             >
               <Flex
@@ -122,29 +126,16 @@ const Login: React.FC = () => {
                 />
               )) || (
                 <>
-                  <InputGroup>
-                    <InputLeftElement
-                      color="gray.300"
-                      fontSize="0.6em"
-                      maxH="0.6em"
-                      maxW="0.6em"
-                      p={4}
-                    >
-                      <AtSignIcon />
-                    </InputLeftElement>
-                    <Input
-                      onChange={(e) => setEmail(e.target.value)}
-                      type="email"
-                      size="sm"
-                      borderColor="gray.400"
-                      borderRadius={4}
-                      placeholder="Email"
-                      pl={8}
-                      _placeholder={{ opacity: 0.2, color: "inherit" }}
-                    />
-                  </InputGroup>
-                  <InputGroup>
-                    <InputLeftElement color="gray.300" maxH="100%" maxW="32px">
+                  <DefaultInput<string>
+                    type="email"
+                    icon={<AtSignIcon />}
+                    placeholder="Email"
+                    setter={setEmail}
+                    value={email}
+                  />
+                  <DefaultInput<string>
+                    type={showPassword ? "text" : "password"}
+                    icon={
                       <Button
                         size="xs"
                         onClick={handleClick}
@@ -153,20 +144,17 @@ const Login: React.FC = () => {
                       >
                         {showPassword ? <ViewOffIcon /> : <ViewIcon />}
                       </Button>
-                    </InputLeftElement>
-                    <Input
-                      onChange={(e) => setPassword(e.target.value)}
-                      type={showPassword ? "text" : "password"}
-                      size="sm"
-                      borderColor="gray.400"
-                      borderRadius={4}
-                      placeholder="Password"
-                      pl={8}
-                      _placeholder={{ opacity: 0.2, color: "inherit" }}
-                    />
-                  </InputGroup>
+                    }
+                    placeholder="Password"
+                    setter={setPassword}
+                    value={password}
+                  />
                   <ButtonGroup display="flex" justifyContent="flex-end">
-                    <Button variant="outline" size="xs">
+                    <Button
+                      variant="outline"
+                      size="xs"
+                      onClick={() => setOpenNewUser(true)}
+                    >
                       Register
                     </Button>
                     <Button
@@ -184,6 +172,7 @@ const Login: React.FC = () => {
           </Flex>
         </Card>
       </Flex>
+      <NewUser isOpen={openNewUser} onClose={setOpenNewUser} />
     </>
   );
 };
