@@ -14,7 +14,6 @@ import NotebookSVG from "../assets/notebook.svg?react";
 import { AtSignIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { requestPostPut } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
 import NewUser from "../components/Modal/NewUser";
 import DefaultInput from "../components/Inputs/DefaultInput";
 
@@ -23,7 +22,6 @@ const Login: React.FC = () => {
   const handleClick = () => setShowPassword(!showPassword);
   const toast = useToast();
   const [openNewUser, setOpenNewUser] = useState<boolean>(false);
-  const signIn = useSignIn();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
@@ -34,18 +32,17 @@ const Login: React.FC = () => {
     const endpoint = "/auth/login";
     return requestPostPut(endpoint, { email, password }, "", "post")
       .then((response) => {
-        const signed = signIn({
-          auth: {
-            token: response.data["access_token"],
-            type: "Bearer",
-          },
-          userState: {
+        localStorage.setItem("_auth", response.data["access_token"]);
+        localStorage.setItem(
+          "_auth_state",
+          JSON.stringify({
             id: response.data.userId,
             email,
             userName: response.data.name,
-          },
-        });
-        if (signed) return navigate("/");
+          })
+        );
+
+        return navigate("/");
       })
       .catch(() => {
         setIsLoading(false);
