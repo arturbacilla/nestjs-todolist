@@ -17,10 +17,12 @@ import NotebookSVG from "../assets/notebook.svg?react";
 import { AtSignIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { requestPostPut } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const toast = useToast();
+  const signIn = useSignIn();
   const navigate = useNavigate();
   const handleClick = () => setShowPassword(!showPassword);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -31,7 +33,18 @@ const Login: React.FC = () => {
     setIsLoading(true);
     const endpoint = "/auth/login";
     return requestPostPut(endpoint, { email, password }, "", "post")
-      .then(() => navigate("/"))
+      .then((response) => {
+        const signed = signIn({
+          auth: {
+            token: response.data["access_token"],
+            type: "Bearer",
+          },
+          userState: {
+            email,
+          },
+        });
+        if (signed) return navigate("/");
+      })
       .catch(() => {
         setIsLoading(false);
         return toast({
@@ -40,6 +53,11 @@ const Login: React.FC = () => {
           status: "error",
           isClosable: true,
         });
+      })
+      .finally(() => {
+        setEmail("");
+        setPassword("");
+        setIsLoading(false);
       });
   };
 

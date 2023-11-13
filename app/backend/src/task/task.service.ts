@@ -78,7 +78,7 @@ export class TaskService {
       if (!exists) return false;
       const updated = await this.prisma.task.update({
         where,
-        data: { status },
+        data: { status, conclusionDate: newStatus ? new Date() : null },
       });
       if (!updated) return false;
       return true;

@@ -30,6 +30,8 @@ const TaskBox: React.FC<TaskBoxProps> = ({
   ) => {
     e.preventDefault();
     setIsLoading(true);
+    const token = localStorage.getItem("_auth") || "";
+
     let endpoint = "/task";
     if (type === "edit" && task) {
       endpoint = `/task/${task.id}`;
@@ -37,7 +39,7 @@ const TaskBox: React.FC<TaskBoxProps> = ({
     return requestPostPut(
       endpoint,
       { title, description },
-      "",
+      token,
       type === "edit" ? "put" : "post"
     )
       .then(() => {

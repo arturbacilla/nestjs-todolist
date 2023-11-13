@@ -27,8 +27,10 @@ import EditTask from "../components/TaskBox/EditTask";
 import FocusLock from "react-focus-lock";
 import { requestGet, requestPostPut } from "../services/api";
 import { AxiosError } from "axios";
+import useVerifyToken from "../hooks/useVerifyToken";
 
 const Todo: React.FC = () => {
+  const tokenValid = useVerifyToken();
   const toast = useToast();
   const addTask = useDisclosure();
 
@@ -58,8 +60,11 @@ const Todo: React.FC = () => {
       !setHasError
     )
       return;
+
+    const token = localStorage.getItem("_auth") || "";
+
     const endpoint = "/tasks";
-    return requestGet(endpoint)
+    return requestGet(endpoint, token)
       .then((result) => setTasks(result.data.message))
       .catch(() => {
         setHasError(true);
@@ -80,8 +85,9 @@ const Todo: React.FC = () => {
   const fastSubmit = async () => {
     if (!setIsLoading || !taskInput || taskInput === "") return;
     setIsLoading(true);
+    const token = localStorage.getItem("_auth") || "";
     const endpoint = "/task";
-    return requestPostPut(endpoint, { title: taskInput }, "", "post")
+    return requestPostPut(endpoint, { title: taskInput }, token, "post")
       .then(() => {
         fetchAllTasks();
         return toast({
@@ -103,9 +109,10 @@ const Todo: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!tokenValid) return;
     setHasError && setHasError(false);
     fetchAllTasks();
-  }, [fetchAllTasks, setHasError]);
+  }, [fetchAllTasks, setHasError, tokenValid]);
 
   if (
     !loadingHandlers ||
@@ -167,7 +174,7 @@ const Todo: React.FC = () => {
 
                 <Tooltip
                   placement="bottom-start"
-                  label="Press enter to fast-add and press + to add description"
+                  label="Click on + to add description or press enter to fast-add"
                 >
                   <Input
                     onChange={(e) => setTaskInput(e.target.value)}

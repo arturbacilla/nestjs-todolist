@@ -20,6 +20,8 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { ITasksContext } from "../../types/context";
 import TasksContext from "../../context/TasksContext";
 import { requestDelete, requestPostPut } from "../../services/api";
+import { format } from "date-fns";
+import { useIntl } from "react-intl";
 
 type TListItem = {
   task: ITask;
@@ -28,6 +30,7 @@ type TListItem = {
 
 const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
   const toast = useToast();
+  const { locale } = useIntl();
   const { updatingHandlers, editHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
@@ -40,9 +43,10 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
     e.preventDefault();
     if (!setIsUpdating) return;
     setIsUpdating(task.id);
+    const token = localStorage.getItem("_auth") || "";
     const endpoint = `/task/${task.id}`;
 
-    return requestPostPut(endpoint, { status: e.target.checked }, "", "post")
+    return requestPostPut(endpoint, { status: e.target.checked }, token, "post")
       .then(() => fetchAllTasks())
       .catch((reject) => {
         console.error(reject);
@@ -59,7 +63,9 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
     if (!setIsUpdating) return;
     setIsUpdating(task.id);
     const endpoint = `/task/${task.id}`;
-    return requestDelete(endpoint, "")
+    const token = localStorage.getItem("_auth") || "";
+
+    return requestDelete(endpoint, token)
       .then(() => {
         fetchAllTasks();
         return toast({
@@ -112,17 +118,19 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
                   size="16px"
                   boxSize="16px"
                 />
-                <Text
-                  align="left"
-                  fontSize="sm"
-                  as={task.status === "COMPLETED" ? "s" : "span"}
-                  fontWeight="semibold"
-                  overflowWrap="break-word"
-                  overflow="hidden"
-                  pt="2px"
-                >
-                  {task.title}
-                </Text>
+                <Flex alignItems="flex-start" gap="8px">
+                  <Text
+                    align="left"
+                    fontSize="sm"
+                    as={task.status === "COMPLETED" ? "s" : "span"}
+                    fontWeight="semibold"
+                    overflowWrap="break-word"
+                    overflow="hidden"
+                    pt="2px"
+                  >
+                    {task.title}
+                  </Text>
+                </Flex>
               </Box>
             ) : (
               <Box
@@ -133,26 +141,38 @@ const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
                 overflow="hidden"
                 textOverflow="ellipsis"
               >
-                <Checkbox
-                  colorScheme="orange"
-                  defaultChecked={task.status === "COMPLETED"}
-                  borderColor="orange.200"
-                  display="flex"
-                  alignItems="center"
-                  isDisabled={!!isUpdating && isUpdating !== task.id}
-                  onChange={handleCheck}
-                >
-                  <Text
-                    align="left"
-                    fontSize="sm"
-                    as={task.status === "COMPLETED" ? "s" : "span"}
-                    fontWeight={
-                      task.status === "COMPLETED" ? "medium" : "semibold"
-                    }
+                <Flex alignItems="center" gap="8px">
+                  <Checkbox
+                    colorScheme="orange"
+                    defaultChecked={task.status === "COMPLETED"}
+                    borderColor="orange.200"
+                    display="flex"
+                    alignItems="center"
+                    isDisabled={!!isUpdating && isUpdating !== task.id}
+                    onChange={handleCheck}
                   >
-                    {task.title}
-                  </Text>
-                </Checkbox>
+                    <Text
+                      align="left"
+                      fontSize="sm"
+                      as={task.status === "COMPLETED" ? "s" : "span"}
+                      fontWeight={
+                        task.status === "COMPLETED" ? "medium" : "semibold"
+                      }
+                    >
+                      {task.title}
+                    </Text>
+                  </Checkbox>
+                  {task.status === "COMPLETED" && (
+                    <Text fontSize="0.5rem" fontStyle="italic" color="gray.500">
+                      {(task.conclusionDate &&
+                        `Completed at ${format(
+                          new Date(task?.conclusionDate),
+                          "Pp"
+                        )}`) ||
+                        ""}
+                    </Text>
+                  )}
+                </Flex>
               </Box>
             )}
             <Flex alignItems="center" alignSelf="center" justifySelf="flex-end">
