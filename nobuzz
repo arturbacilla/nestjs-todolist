@@ -199,6 +199,18 @@ start () {
 	manipulateBackendEnv "$POSTGRES_PASSWORD" "$POSTGRES_USER" "$POSTGRES_DB"
 	manipulateFrontendEnv
 	MsgSuccess "Everything setup correctly. Starting app."
+
+	yarn install &&
+
+	cd ./app/backend || (MsgError "Failed to reach backend folder" ; exit 1) &&
+	yarn install &&
+
+	cd ../frontend || (MsgError "Failed to reach frontend folder" ; exit 1) &&
+	
+	yarn install &&
+
+	cd ../..
+
 	docker compose up
 }
 
