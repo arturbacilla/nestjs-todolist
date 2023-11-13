@@ -166,8 +166,10 @@ start () {
 	manipulateFrontendEnv
 	MsgSuccess "Everything setup correctly. Starting app."
 
+	MsgInfo "\nInstalling dependencies on root"
 	yarn install &&
 
+	MsgInfo "\nInstalling dependencies on backend"
 	cd ./app/backend || (MsgError "Failed to reach backend folder" ; exit 1) &&
 	yarn install &&
 
@@ -175,10 +177,12 @@ start () {
 
 	if [ $? == 1 ]; then MsgError "Failed to reach frontend folder"; exit 1; fi
 	
+	MsgInfo "\nInstalling dependencies on frontend"
 	yarn install &&
 
 	cd ../..
 
+	MsgInfo "\nStarting application"
 	docker compose up
 }
 
