@@ -2,5 +2,7 @@ FROM node:18-alpine
 WORKDIR /backend
 COPY . .
 RUN yarn install
-ENTRYPOINT [ "yarn", "start:dev" ]
+
+ENTRYPOINT [ "sh", "-c" ,"yarn prisma migrate dev && yarn start:dev" ]
+
 EXPOSE 3001
