@@ -28,11 +28,13 @@ import FocusLock from "react-focus-lock";
 import { requestGet, requestPostPut } from "../services/api";
 import { AxiosError } from "axios";
 import useVerifyToken from "../hooks/useVerifyToken";
+import { useNavigate } from "react-router-dom";
 
 const Todo: React.FC = () => {
   const tokenValid = useVerifyToken();
   const toast = useToast();
   const addTask = useDisclosure();
+  const navigate = useNavigate();
 
   const firstFieldRef = React.useRef(null);
   const {
@@ -42,6 +44,7 @@ const Todo: React.FC = () => {
     updatingHandlers,
     editHandlers,
     errorHandlers,
+    userHandlers,
   } = useContext<ITasksContext | null>(TasksContext) || {};
 
   const [tasks, setTasks] = tasksHandlers || [];
@@ -50,6 +53,7 @@ const Todo: React.FC = () => {
   const [, setIsUpdating] = updatingHandlers || [];
   const [isEditing, setIsEditing] = editHandlers || [];
   const [, setHasError] = errorHandlers || [];
+  const [storeUser] = userHandlers || [];
 
   const fetchAllTasks = useCallback(() => {
     if (
@@ -57,13 +61,15 @@ const Todo: React.FC = () => {
       !setIsLoading ||
       !setIsUpdating ||
       !setTaskInput ||
-      !setHasError
+      !setHasError ||
+      !storeUser
     )
       return;
 
     const token = localStorage.getItem("_auth") || "";
+    const { id } = storeUser;
 
-    const endpoint = "/tasks";
+    const endpoint = `/tasks/${id}`;
     return requestGet(endpoint, token)
       .then((result) => setTasks(result.data.message))
       .catch(() => {
@@ -80,14 +86,28 @@ const Todo: React.FC = () => {
         setIsUpdating(null);
         setTaskInput("");
       });
-  }, [setTasks, setIsLoading, setIsUpdating, setTaskInput, setHasError, toast]);
+  }, [
+    setTasks,
+    setIsLoading,
+    setIsUpdating,
+    setTaskInput,
+    setHasError,
+    storeUser,
+    toast,
+  ]);
 
   const fastSubmit = async () => {
-    if (!setIsLoading || !taskInput || taskInput === "") return;
+    if (!setIsLoading || !taskInput || taskInput === "" || !storeUser) return;
     setIsLoading(true);
     const token = localStorage.getItem("_auth") || "";
+
     const endpoint = "/task";
-    return requestPostPut(endpoint, { title: taskInput }, token, "post")
+    return requestPostPut(
+      endpoint,
+      { title: taskInput, authorId: storeUser.id },
+      token,
+      "post"
+    )
       .then(() => {
         fetchAllTasks();
         return toast({

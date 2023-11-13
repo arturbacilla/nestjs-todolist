@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TextInput from "../Inputs/TextInput";
 import {
   Box,
@@ -12,6 +12,8 @@ import {
 import { TaskBoxProps } from "../../types/general";
 import { requestPostPut } from "../../services/api";
 import { AxiosError } from "axios";
+import { ITasksContext } from "../../types/context";
+import TasksContext from "../../context/TasksContext";
 
 const TaskBox: React.FC<TaskBoxProps> = ({
   type,
@@ -25,6 +27,9 @@ const TaskBox: React.FC<TaskBoxProps> = ({
   const [description, setDescription] = useState<string | undefined>(undefined);
   const [title, setTitle] = useState<string | undefined>(undefined);
   const toast = useToast();
+  const { userHandlers } = useContext<ITasksContext | null>(TasksContext) || {};
+
+  const [storeUser] = userHandlers || [];
 
   useEffect(() => {
     setTitle(defaultName);
@@ -46,13 +51,15 @@ const TaskBox: React.FC<TaskBoxProps> = ({
     setIsLoading(true);
     const token = localStorage.getItem("_auth") || "";
 
+    if (!storeUser || !token) return;
+    const { id: authorId } = storeUser;
     let endpoint = "/task";
     if (type === "edit" && task) {
       endpoint = `/task/${task.id}`;
     }
     return requestPostPut(
       endpoint,
-      { title, description },
+      { title, description, authorId },
       token,
       type === "edit" ? "put" : "post"
     )

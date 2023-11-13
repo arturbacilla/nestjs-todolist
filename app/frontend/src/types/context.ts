@@ -1,4 +1,4 @@
-import { HandlersTuples } from "./general";
+import { HandlersTuples, User } from "./general";
 import { ITask } from "./task";
 
 export interface ITasksContext {
@@ -8,4 +8,5 @@ export interface ITasksContext {
   updatingHandlers: HandlersTuples<number | null>;
   editHandlers: HandlersTuples<number | null>;
   errorHandlers: HandlersTuples<boolean>;
+  userHandlers: HandlersTuples<User | null>;
 }

@@ -12,3 +12,9 @@ export interface TaskBoxProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   task?: ITask;
 }
+
+export interface User {
+  id: number | string;
+  email: string;
+  userName: string;
+}

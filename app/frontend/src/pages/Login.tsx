@@ -7,9 +7,6 @@ import {
   CircularProgress,
   Divider,
   Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -43,7 +40,9 @@ const Login: React.FC = () => {
             type: "Bearer",
           },
           userState: {
+            id: response.data.userId,
             email,
+            userName: response.data.name,
           },
         });
         if (signed) return navigate("/");

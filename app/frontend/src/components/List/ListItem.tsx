@@ -30,8 +30,7 @@ type TListItem = {
 
 const ListItem: React.FC<TListItem> = ({ task, fetchAllTasks }) => {
   const toast = useToast();
-  const { locale } = useIntl();
-  const { updatingHandlers, editHandlers } =
+  const { updatingHandlers, editHandlers, userHandlers } =
     useContext<ITasksContext | null>(TasksContext) || {};
 
   const [isUpdating, setIsUpdating] = updatingHandlers || [];
