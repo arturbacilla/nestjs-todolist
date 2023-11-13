@@ -9,6 +9,20 @@ Este projeto envolve a criação de um sistema de gerenciamento de tarefas com u
 
 - [@arturbacilla](https://www.github.com/arturbacilla)
 
+## Execução Local
+
+Clone the project
+
+```bash
+  git clone git@github.com:arturbacilla/nobuzz-challenge.git
+```
+
+Go to the project directory
+
+```bash
+  cd ./nobuzz-challenge
+
+```
 #### Execução:
 
 É necessario possuir o docker-engine (com docker compose) instalado para executar esse projeto.
@@ -75,6 +89,7 @@ e por último executar na pasta raiz do projeto:
 `docker compose up`
 </details>
 
+
 ## Tecnologias
 
 <!-- Ícones tech: https://shields.io/  https://simpleicons.org/ -->
@@ -125,20 +140,6 @@ e por último executar na pasta raiz do projeto:
   <img alt="JWT" src="https://img.shields.io/badge/jwt-ffffff?style=for-the-badge&logo=jsonwebtokens&logoColor=black">
 </picture>
 
-## Execução Local
-
-Clone the project
-
-```bash
-  git clone git@github.com:arturbacilla/nobuzz-challenge.git
-```
-
-Go to the project directory
-
-```bash
-  cd ./nobuzz-challenge
-
-```
 
 ## Feedback
 
