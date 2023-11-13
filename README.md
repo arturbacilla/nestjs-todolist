@@ -9,71 +9,6 @@ Este projeto envolve a criação de um sistema de gerenciamento de tarefas com u
 
 - [@arturbacilla](https://www.github.com/arturbacilla)
 
-## Tecnologias
-
-<!-- Ícones tech: https://shields.io/  https://simpleicons.org/ -->
-<!-- Basta descomentar cada tag para incluí-la no readme-->
-
-**Linguagens:**  
- <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-  <img alt="Typescript" src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-</picture>
-
-**Frontend:** 
- <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
-  <img alt="React" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
-</picture>
-
-**Backend:** 
- <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
-  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
-</picture>
-
- <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/NestJS-ffffff?style=for-the-badge&logo=nestjs&logoColor=E0234E">
-  <img alt="NestJS" src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=black">
-</picture>
-
- <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
-  <img alt="Prisma" src="https://img.shields.io/badge/prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
-</picture>
-
-**Database:** 
- <picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/postgre-4169E1?style=for-the-badge&logo=postgresql&logoColor=black">
-  <img alt="Postgre" src="https://img.shields.io/badge/postgre-4169E1?style=for-the-badge&logo=postgresql&logoColor=black">
-</picture>
-
-**Outros:** 
-<picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-  <img alt="Docker" src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=black">
-</picture>
-
-<picture>
-  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/jwt-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
-  <img alt="JWT" src="https://img.shields.io/badge/jwt-ffffff?style=for-the-badge&logo=jsonwebtokens&logoColor=black">
-</picture>
-
-## Execução Local
-
-Clone the project
-
-```bash
-  git clone git@github.com:arturbacilla/nobuzz-challenge.git
-```
-
-Go to the project directory
-
-```bash
-  cd ./nobuzz-challenge
-
-```
-
 #### Execução:
 
 É necessario possuir o docker-engine (com docker compose) instalado para executar esse projeto.
@@ -139,6 +74,71 @@ Além disso será necessário executar `yarn install` na pasta raíz e nas pasta
 e por último executar na pasta raiz do projeto:
 `docker compose up`
 </details>
+
+## Tecnologias
+
+<!-- Ícones tech: https://shields.io/  https://simpleicons.org/ -->
+<!-- Basta descomentar cada tag para incluí-la no readme-->
+
+**Linguagens:**  
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img alt="Typescript" src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+</picture>
+
+**Frontend:** 
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+  <img alt="React" src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+</picture>
+
+**Backend:** 
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+</picture>
+
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/NestJS-ffffff?style=for-the-badge&logo=nestjs&logoColor=E0234E">
+  <img alt="NestJS" src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=black">
+</picture>
+
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
+  <img alt="Prisma" src="https://img.shields.io/badge/prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white">
+</picture>
+
+**Database:** 
+ <picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/postgre-4169E1?style=for-the-badge&logo=postgresql&logoColor=black">
+  <img alt="Postgre" src="https://img.shields.io/badge/postgre-4169E1?style=for-the-badge&logo=postgresql&logoColor=black">
+</picture>
+
+**Outros:** 
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+  <img alt="Docker" src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=black">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="https://img.shields.io/badge/jwt-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+  <img alt="JWT" src="https://img.shields.io/badge/jwt-ffffff?style=for-the-badge&logo=jsonwebtokens&logoColor=black">
+</picture>
+
+## Execução Local
+
+Clone the project
+
+```bash
+  git clone git@github.com:arturbacilla/nobuzz-challenge.git
+```
+
+Go to the project directory
+
+```bash
+  cd ./nobuzz-challenge
+
+```
 
 ## Feedback
 
