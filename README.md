@@ -25,6 +25,11 @@ Go to the project directory
 ```
 #### Execução:
 
+#### Dependências necessárias:
+**Yarn (classic):** @1.22.19
+**docker-engine:** com compose
+**node**: >=18.18.2
+
 É necessario possuir o docker-engine (com docker compose) instalado para executar esse projeto.
 
 <details open>
