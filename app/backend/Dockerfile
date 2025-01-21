@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine3.16
 WORKDIR /backend
 COPY . .
 RUN yarn install
