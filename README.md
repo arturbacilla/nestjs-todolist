@@ -1,4 +1,5 @@
 
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/arturbacilla/nextjs-todolist/blob/master/README.en-us.md)
 # Nest.JS - Todo List
 
 ![demo screenshot](/screenshot.png)
