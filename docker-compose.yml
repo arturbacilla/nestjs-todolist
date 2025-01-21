@@ -2,7 +2,7 @@ version: "3.9"
 services:
   frontend:
     build: ./app/frontend
-    container_name: nobuzz_frontend
+    container_name: nest-todo_frontend
     volumes:
       - ./app/frontend:/frontend
     depends_on:
@@ -16,7 +16,7 @@ services:
       - 5173:5173
   backend:
     build: ./app/backend
-    container_name: nobuzz_backend
+    container_name: nest-todo_backend
     volumes:
       - ./app/backend:/backend
     depends_on:
@@ -32,7 +32,7 @@ services:
       - 3001:3001
   db:
     image: postgres
-    container_name: nobuzz_db
+    container_name: nest-todo_db
     volumes:
       - ./db:/var/lib/postgresql/data
     ports:
@@ -41,7 +41,7 @@ services:
       - .env
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "nobuzz_db"]
+      test: ["CMD-SHELL", "pg_isready", "-d", "nest-todo_db"]
       interval: 3s
       timeout: 20s
       retries: 5

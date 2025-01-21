@@ -1,5 +1,5 @@
 
-# Nobuzz Challenge - Todo List
+# Nest.JS - Todo List
 
 ![demo screenshot](/screenshot.png)
 
@@ -22,13 +22,13 @@ Este projeto envolve a criação de um sistema de gerenciamento de tarefas com u
 Clone the project
 
 ```bash
-  git clone git@github.com:arturbacilla/nobuzz-challenge.git
+  git clone git@github.com:arturbacilla/nestjs-todolist.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd ./nobuzz-challenge
+  cd ./nest-todo
 
 ```
 #### Execução:
@@ -48,13 +48,13 @@ ou
 Para usuários de linux (testado com ZSH e BASH) ou mac (não testado), executar o seguinte comando na pasta raiz do projeto e seguir as instruções: 
 
  ```bash
-  ./nobuzz
+  ./nest-todo
 
 ```
  As vezes pode ser necessário permitir a execução do script com o comando:
 
  ```bash
-  sudo chmod +x ./nobuzz
+  sudo chmod +x ./nest-todo
   
 ```
 </details>
@@ -77,7 +77,7 @@ Renomeie o arquivo `.env.example` localizado na raiz do projeto para `.env` e in
 `POSTGRES_PASSWORD=algumpassword`
 `POSTGRES_USER=postgres`
 `PGUSER=postgres`
-`POSTGRES_DB=nobuzz_db`
+`POSTGRES_DB=nest-todo_db`
 
 Além disso, 
 Renomear o arquivo `./app/backend/.env.example` para `./app/backend/.env` e inserir as variáveis de ambiente substituindo de acordo com as variáveis acima
@@ -85,7 +85,7 @@ Renomear o arquivo `./app/backend/.env.example` para `./app/backend/.env` e inse
 `DATABASE_URL=postgresql://<$POSTGRES_USER>:<$POSTGRES_PASSWORD>@db:5432/ <$POSTGRES_DB>?schema=public`
 
 Seguindo o exemplo acima ficaria desta forma:
-`DATABASE_URL=postgresql://postgres:algumpassword@db:5432/nobuzz_db?schema=public`
+`DATABASE_URL=postgresql://postgres:algumpassword@db:5432/nest-todo_db?schema=public`
 
 `JWT_SECRET=algumsegredoJWT`
 

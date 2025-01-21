@@ -108,7 +108,7 @@ const Login: React.FC = () => {
                 borderRadius={5}
               >
                 <Text fontFamily="arial" fontWeight="extrabold" color="white">
-                  NoBuzz
+                  nest-todo
                 </Text>
               </Flex>
               {(isLoading && (
