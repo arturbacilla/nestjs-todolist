@@ -5,6 +5,7 @@ RUN ["yarn", "global", "add", "prisma@5.5.2"]
 
 COPY . .
 
-ENTRYPOINT [ "sh", "-c" ,"yarn prisma migrate dev && yarn start:dev" ]
+CMD ["yarn", "prisma", "migrate", "dev"]
+ENTRYPOINT [ "sh", "-c" ,"yarn start:dev" ]
 
 EXPOSE 3001
