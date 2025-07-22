@@ -1,10 +1,10 @@
-version: "3.9"
 services:
   frontend:
     build: ./app/frontend
     container_name: nest-todo_frontend
     volumes:
       - ./app/frontend:/frontend
+      - ./.env:/frontend/.env
     depends_on:
       backend:
         condition: service_healthy
@@ -13,12 +13,13 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 5173:5173
+      - ${FRONTEND_PORT:-5173}:5173
   backend:
     build: ./app/backend
     container_name: nest-todo_backend
     volumes:
       - ./app/backend:/backend
+      - ./.env:/frontend/.env
     depends_on:
       db:
         condition: service_healthy
@@ -29,14 +30,14 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - 3001:3001
+      - ${VITE_DATABASE_PORT:-3001}:3001
   db:
     image: postgres
     container_name: nest-todo_db
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - nestjs-db:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - ${POSTGRES_PORT:-5432}:5432
     env_file:
       - .env
     restart: unless-stopped
@@ -45,3 +46,6 @@ services:
       interval: 3s
       timeout: 20s
       retries: 5
+
+volumes:
+  nestjs-db:
