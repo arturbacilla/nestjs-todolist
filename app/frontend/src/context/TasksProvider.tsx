@@ -1,8 +1,7 @@
-import type React from "react";
-import { useState } from "react";
-import type { ITasksContext } from "../types/context";
-import type { User } from "../types/general";
-import type { ITask } from "../types/task";
+import React, { useState } from "react";
+import { ITasksContext } from "../types/context";
+import { User } from "../types/general";
+import { ITask } from "../types/task";
 import TasksContext from "./TasksContext";
 
 const taskList: ITask[] = [];

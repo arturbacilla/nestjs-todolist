@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TasksContext from "../context/TasksContext";
 import { requestPostPut } from "../services/api";
-import type { ITasksContext } from "../types/context";
+import { ITasksContext } from "../types/context";
 
 const useVerifyToken = () => {
 	const endpoint = "/auth/verify";
@@ -34,7 +34,7 @@ const useVerifyToken = () => {
 			return setIsValid(true);
 		} catch (error) {
 			setStoreUser(null);
-      console.error(error)
+			console.error(error);
 			return setIsValid(false);
 		}
 	}, [token, navigate, setStoreUser, id, email, userName]);

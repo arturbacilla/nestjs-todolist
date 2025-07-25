@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import DefaultResponse from "src/utils/default";
 import ResponseError from "src/utils/error";
 import { Public } from "./auth.decorator";
-import type { AuthService } from "./auth.service";
+import { AuthService } from "./auth.service";
 
 @Controller("auth")
 export class AuthController {

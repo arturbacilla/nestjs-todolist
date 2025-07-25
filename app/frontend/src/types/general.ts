@@ -1,5 +1,5 @@
-import type { Dispatch, SetStateAction } from "react";
-import type { ITask, TFetchAllTasks } from "./task";
+import { Dispatch, SetStateAction } from "react";
+import { ITask, TFetchAllTasks } from "./task";
 
 export type HandlersTuples<T> = [T, Dispatch<SetStateAction<T>>];
 

@@ -19,7 +19,7 @@ import {
 	useDisclosure,
 	useToast,
 } from "@chakra-ui/react";
-import type { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import React, { useCallback, useContext, useEffect } from "react";
 import FocusLock from "react-focus-lock";
 import NotebookSVG from "../assets/notebook.svg?react";
@@ -29,7 +29,7 @@ import EditTask from "../components/TaskBox/EditTask";
 import TasksContext from "../context/TasksContext";
 import useVerifyToken from "../hooks/useVerifyToken";
 import { requestGet, requestPostPut } from "../services/api";
-import type { ITasksContext } from "../types/context";
+import { ITasksContext } from "../types/context";
 
 const Todo: React.FC = () => {
 	const tokenValid = useVerifyToken();

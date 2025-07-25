@@ -1,6 +1,5 @@
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
-import type React from "react";
-import type { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 interface DefaultInputProps<T> {
 	type: React.HTMLInputTypeAttribute;

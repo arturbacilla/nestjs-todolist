@@ -1,6 +1,6 @@
 import { Accordion, TabPanel, Text } from "@chakra-ui/react";
-import type React from "react";
-import type { ITaksList } from "../../types/task";
+import React from "react";
+import { ITaksList } from "../../types/task";
 import ListItem from "./ListItem";
 
 const TaskList: React.FC<ITaksList> = ({ tasks, filter, fetchAllTasks }) => {

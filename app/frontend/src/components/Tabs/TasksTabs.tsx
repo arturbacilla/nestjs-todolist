@@ -1,9 +1,8 @@
 import { Divider, Tab, TabIndicator, TabList, TabPanels, Tabs, Text } from "@chakra-ui/react";
-import type React from "react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import TasksContext from "../../context/TasksContext";
-import type { ITasksContext } from "../../types/context";
-import type { ITabs } from "../../types/task";
+import { ITasksContext } from "../../types/context";
+import { ITabs } from "../../types/task";
 import TaskList from "../List/TaskList";
 
 const TasksTabs: React.FC<ITabs> = ({ tasks, fetchAllTasks }) => {

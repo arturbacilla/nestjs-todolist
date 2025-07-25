@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as bcrypt from "bcryptjs";
-import type { PrismaService } from "nestjs-prisma";
+import { PrismaService } from "nestjs-prisma";
 
 // This should be a real class/interface representing a user entity
 export type User = any;

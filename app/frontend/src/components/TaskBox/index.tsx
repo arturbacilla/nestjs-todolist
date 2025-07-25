@@ -1,11 +1,10 @@
 import { Box, Button, ButtonGroup, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
-import type { AxiosError } from "axios";
-import type React from "react";
-import { useContext, useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import TasksContext from "../../context/TasksContext";
 import { requestPostPut } from "../../services/api";
-import type { ITasksContext } from "../../types/context";
-import type { TaskBoxProps } from "../../types/general";
+import { ITasksContext } from "../../types/context";
+import { TaskBoxProps } from "../../types/general";
 import TextInput from "../Inputs/TextInput";
 
 const TaskBox: React.FC<TaskBoxProps> = ({

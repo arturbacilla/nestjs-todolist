@@ -1,8 +1,7 @@
 import { Modal, ModalBody, ModalContent, ModalOverlay } from "@chakra-ui/react";
-import type React from "react";
-import type { Dispatch, SetStateAction } from "react";
-import type { TaskBoxProps } from "../../types/general";
-import type { ITask } from "../../types/task";
+import React, { Dispatch, SetStateAction } from "react";
+import { TaskBoxProps } from "../../types/general";
+import { ITask } from "../../types/task";
 import TaskBox from ".";
 
 interface IEditTask {

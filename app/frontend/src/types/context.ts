@@ -1,5 +1,5 @@
-import type { HandlersTuples, User } from "./general";
-import type { ITask } from "./task";
+import { HandlersTuples, User } from "./general";
+import { ITask } from "./task";
 
 export interface ITasksContext {
 	loadingHandlers: HandlersTuples<boolean>;

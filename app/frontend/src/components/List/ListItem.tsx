@@ -16,12 +16,11 @@ import {
 	useToast,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
-import type React from "react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import TasksContext from "../../context/TasksContext";
 import { requestDelete, requestPostPut } from "../../services/api";
-import type { ITasksContext } from "../../types/context";
-import type { ITask, TFetchAllTasks } from "../../types/task";
+import { ITasksContext } from "../../types/context";
+import { ITask, TFetchAllTasks } from "../../types/task";
 
 type TListItem = {
 	task: ITask;
