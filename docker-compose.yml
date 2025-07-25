@@ -1,6 +1,9 @@
 services:
   frontend:
-    build: ./app/frontend
+    build: 
+      context: ./app/frontend
+      args:
+        FRONTEND_PORT: ${FRONTEND_PORT:-5173}
     container_name: nest-todo_frontend
     volumes:
       - ./app/frontend:/frontend
@@ -9,28 +12,32 @@ services:
       backend:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "lsof", "-t", "-i:5173"]
+      test: ["CMD", "lsof", "-t", "-i:${FRONTEND_PORT:-5173}"]
       timeout: 10s
       retries: 5
     ports:
       - ${FRONTEND_PORT:-5173}:5173
+  
   backend:
-    build: ./app/backend
+    build: 
+      context: ./app/backend
+      args:
+        VITE_BACKEND_PORT: ${VITE_BACKEND_PORT:-3001}
     container_name: nest-todo_backend
     volumes:
       - ./app/backend:/backend
-      - ./.env:/frontend/.env
+      - ./.env:/backend/.env
     depends_on:
       db:
         condition: service_healthy
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "lsof", "-t", "-i:3001"]
+      test: ["CMD", "lsof", "-t", "-i:${VITE_BACKEND_PORT:-3001}"]
       timeout: 10s
       retries: 5
     ports:
-      - ${VITE_DATABASE_PORT:-3001}:3001
+      - ${VITE_BACKEND_PORT:-3001}:3001
   db:
     image: postgres
     container_name: nest-todo_db

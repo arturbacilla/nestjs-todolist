@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ITasksContext } from "../types/context";
+import type { ITasksContext } from "../types/context";
 
 const TasksContext = createContext<ITasksContext | null>(null);
 

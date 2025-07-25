@@ -1,15 +1,15 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { Public } from 'src/auth/auth.decorator';
-import ResponseError from 'src/utils/error';
-import { Prisma } from '@prisma/client';
-import DefaultResponse from 'src/utils/default';
+import { Body, Controller, Post } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { Public } from "src/auth/auth.decorator";
+import DefaultResponse from "src/utils/default";
+import ResponseError from "src/utils/error";
+import type { UsersService } from "./users.service";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+	constructor(private usersService: UsersService) {}
 
-  @Public()
+	@Public()
   @Post('new')
   async createUser(@Body() body: any) {
     const { name, user, email, password } = body || {};
