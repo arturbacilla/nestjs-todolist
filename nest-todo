@@ -50,6 +50,7 @@ boldQuestion() {
 }
 
 readBoldWithSuggestion() {
+	local type=$2
 	answer=""
 	while [[ -z "$answer" || ! "$answer" =~ [[:alnum:]] ]]; do
 		read -er -i "$1" answer
@@ -65,64 +66,13 @@ Help() {
 	exit 0
 }
 
-manipulateFrontendEnv() {
-	if [ ! -e "./app/frontend/.env" ]; then
-		{
-			echo "VITE_DATABASE_URL=localhost"
-			echo "VITE_DATABASE_PORT=3001"
-		} >./app/frontend/.env
-	else
-		MsgInfo "app/frontend/.env already exists. "
-		echo
-		cat ./app/frontend/.env
-		echo
-		readYNInput "Is this correct?(y/N) \n"
-		confirm=$?
-		echo
-		if [[ "$confirm" != 0 ]]; then
-			rm -rf ./app/frontend/.env
-			MsgWarn "app/frontend/.env removed. Starting over"
-			manipulateFrontendEnv
-		fi
-	fi
-}
-
-manipulateBackendEnv() {
-	local POSTGRES_PASSWORD=$1
-	local POSTGRES_USER=$2
-	local POSTGRES_DB=$3
-
-	if [ ! -e "./app/backend/.env" ]; then
-		boldQuestion "Insert a jwt secret JWT(JWT_SECRET)? ${NB}ex: supersecretJWT\n"
-		JWT_SECRET=$(readBoldWithSuggestion "supersecretJWT")
-		{
-			echo "DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db/$POSTGRES_DB?schema=public"
-			echo "JWT_SECRET=$JWT_SECRET"
-		} >./app/backend/.env
-		if [[ $? == 0 ]]; then MsgSuccess "app/backend/.env created successfully"; else
-			MsgError "Failed to create app/backend/.env"
-			exit 0
-		fi
-	else
-		MsgInfo "app/backend/.env already exists. "
-		echo
-		cat ./app/backend/.env
-		echo
-		readYNInput "Is this correct?(y/N) \n"
-		confirm=$?
-		echo
-		if [[ "$confirm" != 0 ]]; then
-			rm -rf ./app/backend/.env
-			MsgWarn "app/backend/.env removed. Starting over"
-			manipulateBackendEnv
-		fi
-	fi
-}
-
 start() {
 	local POSTGRES_PASSWORD
 	local POSTGRES_USER
 	local POSTGRES_DB
+	local JWT_SECRET
+	local FRONTEND_PORT
+	local VITE_BACKEND_PORT
 
 	if ! command -v "yarn" >/dev/null 2>&1; then
 		MsgError "You need ${RED}yarn v1.22.19${NC} installed to run this project. Run ${RED}npm install -g yarn${NC}"
@@ -137,12 +87,22 @@ start() {
 		POSTGRES_USER=$(readBoldWithSuggestion "postgres")
 		boldQuestion "Insert a table name(POSTGRES_DB)? ${NB}ex: nest-todo_db\n"
 		POSTGRES_DB=$(readBoldWithSuggestion "nest-todo_db")
+		boldQuestion "Insert a jwt secret JWT(JWT_SECRET)? ${NB}ex: supersecretJWT\n"
+		JWT_SECRET=$(readBoldWithSuggestion "supersecretJWT")
+		boldQuestion "What port your frontend will run? (FRONTEND_PORT)? ${NB}ex: 3000\n"
+		FRONTEND_PORT=$(readBoldWithSuggestion "3000")
+		boldQuestion "What port your backend will run? (VITE_BACKEND_PORT)? ${NB}ex: 3001\n"
+		VITE_BACKEND_PORT=$(readBoldWithSuggestion "3001")
 
 		{
 			echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
 			echo "POSTGRES_USER=$POSTGRES_USER"
 			echo "PGUSER=$POSTGRES_USER"
 			echo "POSTGRES_DB=$POSTGRES_DB"
+			echo "DATABASE_URL=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db/$POSTGRES_DB?schema=public"
+			echo "JWT_SECRET=$JWT_SECRET"
+			echo "VITE_BACKEND_PORT=$VITE_BACKEND_PORT"
+			echo "VITE_BACKEND_URL=localhost"
 		} >.env
 
 		if [[ $? == 0 ]]; then MsgSuccess ".env created successfully"; else
@@ -167,11 +127,11 @@ start() {
 		declare POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 		declare POSTGRES_USER=$POSTGRES_USER
 		declare POSTGRES_DB=$POSTGRES_DB
+		declare DATABASE_URL=$DATABASE_URL
+		declare JWT_SECRET=$JWT_SECRET
 
 	fi
 
-	manipulateBackendEnv "$POSTGRES_PASSWORD" "$POSTGRES_USER" "$POSTGRES_DB"
-	manipulateFrontendEnv
 	MsgSuccess "Everything setup correctly. Starting app."
 
 	MsgInfo "\nInstalling dependencies on root"
@@ -193,7 +153,7 @@ start() {
 		cd ../..
 
 	MsgInfo "\nStarting application"
-	docker compose up
+	docker compose up --build
 }
 
 main() {

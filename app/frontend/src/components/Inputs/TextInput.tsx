@@ -1,18 +1,16 @@
-import { FormControl, Input, InputProps } from "@chakra-ui/react";
+import { FormControl, Input, type InputProps } from "@chakra-ui/react";
 import React from "react";
 
 interface TextInputProps extends InputProps {
-  label: string;
+	label: string;
 }
 
-const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
-  (props, ref) => {
-    return (
-      <FormControl>
-        <Input placeholder={props.label} ref={ref} {...props} />
-      </FormControl>
-    );
-  }
-);
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
+	return (
+		<FormControl>
+			<Input placeholder={props.label} ref={ref} {...props} />
+		</FormControl>
+	);
+});
 
 export default TextInput;
